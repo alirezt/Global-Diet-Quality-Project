@@ -1,7 +1,7 @@
-#' --- 
-#' title: "DQQ Indicators" 
-#' output: github_document 
-#' ---
+---
+title: "DQQ Indicators"
+output: github_document
+---
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 ## 1. Required libraries ----
@@ -230,19 +230,21 @@ d$umeat <- ifelse((rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) == TRUE,
 
 # 4. Subgroup data set ----
 ## 4.1 Data preparation ----
-attr(d$REG2_GLOBAL, "labels")
-attributes(d$REG2_GLOBAL)
+#attr(d$REG2_GLOBAL, "labels")
+#attributes(d$REG2_GLOBAL)
 
 dsub <- d %>%
   group_by(Country, REG2_GLOBAL, COUNTRY_ISO3) %>%
   reframe(n= n())
+dsub
+
 
 REG2_GLOBAL <- fct_collapse(as.factor(dsub$REG2_GLOBAL), "EU" = "1", "FSU" = "2", "AS" = "3", "AM" = "4", "MENA" = "5", "SSA" = "6")
 dsub$REG2_GLOBAL <- REG2_GLOBAL
 
 attributes(dsub$Country) <- NULL
 attributes(dsub$COUNTRY_ISO3) <- NULL
-attributes(dsub$REG2_GLOBAL) <- NULL
+#attributes(dsub$REG2_GLOBAL) <- NULL
 
 
 cntryNames <- dsub$Country
@@ -255,7 +257,8 @@ cntryIncome <- c("L", "UM", "UM", "UM", "LM", "L", "LM", "L", "LM", "LM", "L", "
 ## 4.2 New columns ----
 newcols <- data.frame(Country = cntryNames, ISO3 = cntryISO3, Region = cntryRegion, "Income classification" = cntryIncome)
 dgroup <- left_join(d, newcols, by= "Country")
-write.csv(dgroup, "Output/CSV/dgroup.csv")
+dgroup
+#write.csv(dgroup, "Output/CSV/dgroup.csv")
 
 ## 4.3 Functions for upper/lower confidence ----
 ### 4.3.1 Upper confidence interval ----
@@ -279,7 +282,7 @@ dgroup$Gender <- Gender
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
 dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
-
+dgroup
 
 #### 4.5 Indicators long names ----
 longNames <- c(all5 = "All-5", 
@@ -378,7 +381,6 @@ dgroup_pivot <- dgroup_pivot %>%
   mutate(
     Indicators = as.character(longNames[dgroup_pivot$Indicators])
   )
-
 dgroup_pivot
 #write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
 

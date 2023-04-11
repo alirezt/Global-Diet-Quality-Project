@@ -1,16 +1,14 @@
-dqqGroups
+DQQ Indicators
 ================
-Alireza Taghdisian
-11/04/2023
 
 ``` r
-## 1. Adding required libraries ----
+## 1. Required libraries ----
 library(haven)
 library(tidyverse)
 
 ## 2. Data preparation ----
-# Setting the working directory to your local machine
-# and save the '...Internal.sav' file in a subfolder 'Input'
+# Setting the working directory to your local machine path
+# and save the '...Internal.sav' file in a sub-folder 'Input'
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
 
 #glimpse(d)
@@ -26,7 +24,7 @@ d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender
             "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", "DQQ22", "DQQ23", "DQQ24", 
             "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
 
-##  3. DQQ variables computation  ----
+##  3. DQQ Indicators  ----
 ###  1. MDD-W and FGDS  ----
 ####  1.1 FGDS  ----
 d$fgds <- (rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) + 
@@ -224,59 +222,43 @@ d$snfd <- ifelse((rowSums(d[c("DQQ22","DQQ23", "DQQ24", "DQQ29")] == 1, na.rm=TR
 #### 27. Unprocessed red meat ----
 d$umeat <- ifelse((rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
+# In case you want a csv output at this stage, create 'output' sub-folder
+# in your main directory and save the csv there. 
+#write_csv(d, "Output/CSV/dqqMain.csv")
 
-## 4. CSV Export ----
-# In case you want a csv output, make 'output' sub-folder
-# and save the file there. 
-write_csv(d, "Output/CSV/dqqMain.csv")
+# 4. Subgroup data set ----
+## 4.1 Data preparation ----
+#attr(d$REG2_GLOBAL, "labels")
+#attributes(d$REG2_GLOBAL)
 
-# 8. Subgroup data set ----
-## 8.1 Some preparation ----
-attr(d$REG2_GLOBAL, "labels")
-```
-
-    ##                       Europe          Former Soviet Union 
-    ##                            1                            2 
-    ##                         Asia                     Americas 
-    ##                            3                            4 
-    ## Middle East and North Africa           Sub-Saharan Africa 
-    ##                            5                            6
-
-``` r
-attributes(d$REG2_GLOBAL)
-```
-
-    ## $label
-    ## [1] "Region 2 Global"
-    ## 
-    ## $format.spss
-    ## [1] "F8.0"
-    ## 
-    ## $display_width
-    ## [1] 13
-    ## 
-    ## $class
-    ## [1] "haven_labelled" "vctrs_vctr"     "double"        
-    ## 
-    ## $labels
-    ##                       Europe          Former Soviet Union 
-    ##                            1                            2 
-    ##                         Asia                     Americas 
-    ##                            3                            4 
-    ## Middle East and North Africa           Sub-Saharan Africa 
-    ##                            5                            6
-
-``` r
 dsub <- d %>%
   group_by(Country, REG2_GLOBAL, COUNTRY_ISO3) %>%
   reframe(n= n())
+dsub
+```
 
+    ## # A tibble: 56 x 4
+    ##    Country                  REG2_GLOBAL COUNTRY_ISO3     n
+    ##    <chr>                      <dbl+lbl> <chr>        <int>
+    ##  1 Afghanistan  3 [Asia]                AFG           1000
+    ##  2 Albania      1 [Europe]              ALB           1000
+    ##  3 Armenia      2 [Former Soviet Union] ARM           1003
+    ##  4 Azerbaijan   2 [Former Soviet Union] AZE           1008
+    ##  5 Bangladesh   3 [Asia]                BGD           1000
+    ##  6 Benin        6 [Sub-Saharan Africa]  BEN           1000
+    ##  7 Bolivia      4 [Americas]            BOL           1002
+    ##  8 Burkina Faso 6 [Sub-Saharan Africa]  BFA           1000
+    ##  9 Cambodia     3 [Asia]                KHM           1000
+    ## 10 Cameroon     6 [Sub-Saharan Africa]  CMR           1000
+    ## # i 46 more rows
+
+``` r
 REG2_GLOBAL <- fct_collapse(as.factor(dsub$REG2_GLOBAL), "EU" = "1", "FSU" = "2", "AS" = "3", "AM" = "4", "MENA" = "5", "SSA" = "6")
 dsub$REG2_GLOBAL <- REG2_GLOBAL
 
 attributes(dsub$Country) <- NULL
 attributes(dsub$COUNTRY_ISO3) <- NULL
-attributes(dsub$REG2_GLOBAL) <- NULL
+#attributes(dsub$REG2_GLOBAL) <- NULL
 
 
 cntryNames <- dsub$Country
@@ -286,36 +268,84 @@ cntryIncome <- c("L", "UM", "UM", "UM", "LM", "L", "LM", "L", "LM", "LM", "L", "
                  "LM", "LM", "H", "UM", "UM", "LM", "LM", "LM", "UM", "L", "L", "UM", "LM", "L", "L", "LM","L", "LM",
                  "L", "LM", "LM", "UM", "LM", "L", "UM", "UM", "L", "L", "LM", "L", "L", "H", "LM", "LM", "L", "LM")
 
-## 8.2 Adding the new columns to the 'dqqMain' data frame ----
+## 4.2 New columns ----
 newcols <- data.frame(Country = cntryNames, ISO3 = cntryISO3, Region = cntryRegion, "Income classification" = cntryIncome)
 dgroup <- left_join(d, newcols, by= "Country")
-write.csv(dgroup, "Output/CSV/dgroup.csv")
+dgroup
+```
 
-## 8.3 Functions for upper/lower confidence in proportional sampling ----
-### 8.3.1 Upper confidence interval ----
+    ## # A tibble: 63,663 x 93
+    ##        STRATA   PSU    CaseID Weight FieldDate  Country   Gender   Age Education
+    ##         <dbl> <dbl>     <dbl>  <dbl> <date>     <chr>   <dbl+lb> <dbl> <dbl+lbl>
+    ##  1 6016100001    NA 156401410  0.837 2021-09-01 Jordan  2 [Fema~ 20 [] 2 [Secon~
+    ##  2 6016100003    NA 146229283  1.25  2021-09-01 Jordan  1 [Male] 33 [] 2 [Secon~
+    ##  3 6016100001    NA 145290048  1.73  2021-09-01 Jordan  1 [Male] 42 [] 2 [Secon~
+    ##  4 6016100003    NA 122320736  1.47  2021-09-01 Jordan  2 [Fema~ 45 [] 2 [Secon~
+    ##  5 6016100002    NA 126870248  0.811 2021-09-01 Jordan  2 [Fema~ 53 [] 2 [Secon~
+    ##  6 6016100003    NA 129779287  0.376 2021-09-01 Jordan  1 [Male] 55 [] 2 [Secon~
+    ##  7 6016100001    NA 118970612  0.439 2021-09-01 Jordan  1 [Male] 37 [] 2 [Secon~
+    ##  8 6016100001    NA 119053810  1.69  2021-09-01 Jordan  2 [Fema~ 60 [] 1 [Compl~
+    ##  9 6016100001    NA 157748114  0.645 2021-09-01 Jordan  2 [Fema~ 30 [] 3 [Compl~
+    ## 10 6016100001    NA 113253386  0.636 2021-09-01 Jordan  2 [Fema~ 64 [] 2 [Secon~
+    ## # i 63,653 more rows
+    ## # i 84 more variables: IncomeQuintiles <dbl+lbl>, REG2_GLOBAL <dbl+lbl>,
+    ## #   COUNTRY_ISO3 <chr>, Urbanicity <dbl+lbl>, DQQ1 <dbl+lbl>, DQQ2 <dbl+lbl>,
+    ## #   DQQ3 <dbl+lbl>, DQQ4 <dbl+lbl>, DQQ5 <dbl+lbl>, DQQ6_1 <dbl+lbl>,
+    ## #   DQQ6_2 <dbl+lbl>, DQQ7_1 <dbl+lbl>, DQQ7_2 <dbl+lbl>, DQQ7_3 <dbl+lbl>,
+    ## #   DQQ8 <dbl+lbl>, DQQ9 <dbl+lbl>, DQQ10_1 <dbl+lbl>, DQQ10_2 <dbl+lbl>,
+    ## #   DQQ11 <dbl+lbl>, DQQ12 <dbl+lbl>, DQQ13 <dbl+lbl>, DQQ13_IND <dbl+lbl>, ...
+
+``` r
+#write.csv(dgroup, "Output/CSV/dgroup.csv")
+
+## 4.3 Functions for upper/lower confidence ----
+### 4.3.1 Upper confidence interval ----
 upconf <- function(x){
   mean(x == 1, na.rm = TRUE)*100 + 
     qnorm(0.975) * sqrt(((mean(x == 1, na.rm = TRUE)*100)*
                            (100-(mean(x == 1, na.rm = TRUE)*100)))/length(na.omit(x)))
 }
 
-### 8.3.2 Lower confidence interval ----
+### 4.3.2 Lower confidence interval ----
 lowconf <- function(x){
   mean(x == 1, na.rm = TRUE)*100 - 
     qnorm(0.975) * sqrt(((mean(x == 1, na.rm = TRUE)*100)*
                            (100-(mean(x == 1, na.rm = TRUE)*100)))/length(na.omit(x)))
 }
 
-### 8.4 Labels and names of the Urbanicity and Gender ----
+### 4.4 Setting labels for Urbanicity and Gender ----
 Gender <- fct_collapse(as.factor(dgroup$Gender), "Male" = "1", "Female" = "2")
 dgroup$Gender <- Gender
 
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
 dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
+dgroup
+```
 
+    ## # A tibble: 63,579 x 93
+    ##        STRATA   PSU    CaseID Weight FieldDate  Country Gender     Age Education
+    ##         <dbl> <dbl>     <dbl>  <dbl> <date>     <chr>   <fct>  <dbl+l> <dbl+lbl>
+    ##  1 6016100001    NA 156401410  0.837 2021-09-01 Jordan  Female   20 [] 2 [Secon~
+    ##  2 6016100003    NA 146229283  1.25  2021-09-01 Jordan  Male     33 [] 2 [Secon~
+    ##  3 6016100001    NA 145290048  1.73  2021-09-01 Jordan  Male     42 [] 2 [Secon~
+    ##  4 6016100003    NA 122320736  1.47  2021-09-01 Jordan  Female   45 [] 2 [Secon~
+    ##  5 6016100002    NA 126870248  0.811 2021-09-01 Jordan  Female   53 [] 2 [Secon~
+    ##  6 6016100003    NA 129779287  0.376 2021-09-01 Jordan  Male     55 [] 2 [Secon~
+    ##  7 6016100001    NA 118970612  0.439 2021-09-01 Jordan  Male     37 [] 2 [Secon~
+    ##  8 6016100001    NA 119053810  1.69  2021-09-01 Jordan  Female   60 [] 1 [Compl~
+    ##  9 6016100001    NA 157748114  0.645 2021-09-01 Jordan  Female   30 [] 3 [Compl~
+    ## 10 6016100001    NA 113253386  0.636 2021-09-01 Jordan  Female   64 [] 2 [Secon~
+    ## # i 63,569 more rows
+    ## # i 84 more variables: IncomeQuintiles <dbl+lbl>, REG2_GLOBAL <dbl+lbl>,
+    ## #   COUNTRY_ISO3 <chr>, Urbanicity <fct>, DQQ1 <dbl+lbl>, DQQ2 <dbl+lbl>,
+    ## #   DQQ3 <dbl+lbl>, DQQ4 <dbl+lbl>, DQQ5 <dbl+lbl>, DQQ6_1 <dbl+lbl>,
+    ## #   DQQ6_2 <dbl+lbl>, DQQ7_1 <dbl+lbl>, DQQ7_2 <dbl+lbl>, DQQ7_3 <dbl+lbl>,
+    ## #   DQQ8 <dbl+lbl>, DQQ9 <dbl+lbl>, DQQ10_1 <dbl+lbl>, DQQ10_2 <dbl+lbl>,
+    ## #   DQQ11 <dbl+lbl>, DQQ12 <dbl+lbl>, DQQ13 <dbl+lbl>, DQQ13_IND <dbl+lbl>, ...
 
-#### 8.5 Indicators long names ----
+``` r
+#### 4.5 Indicators long names ----
 longNames <- c(all5 = "All-5", 
                all5a = "At least one vegetable",
                all5b = "At least one fruit",
@@ -365,7 +395,7 @@ longNames <- c(all5 = "All-5",
                zvegfr= "Zero vegetable or fruit consumption"
 )
 
-## 8.6 Constructing the 'subgroup' pivot-long version ----
+## 4.6 Constructing the 'subgroup' pivot-long version ----
 dgroup_pivot <- dgroup %>% 
   
   # 1. Copy and paste 'All' category as a 'Female + Male'
@@ -412,6 +442,26 @@ dgroup_pivot <- dgroup_pivot %>%
   mutate(
     Indicators = as.character(longNames[dgroup_pivot$Indicators])
   )
+dgroup_pivot
+```
 
-write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
+    ## # A tibble: 12,880 x 9
+    ##    Income.classification Region Country ISO3  Subgroup Indicators     Prevalence
+    ##    <chr>                 <fct>  <chr>   <chr> <chr>    <chr>               <dbl>
+    ##  1 H                     EU     Greece  GRC   All      Foods made fr~       75.2
+    ##  2 H                     EU     Greece  GRC   All      Baked or grai~       33.7
+    ##  3 H                     EU     Greece  GRC   All      Other sweets         34.2
+    ##  4 H                     EU     Greece  GRC   All      Eggs                 28.8
+    ##  5 H                     EU     Greece  GRC   All      Cheese               72.4
+    ##  6 H                     EU     Greece  GRC   All      Yogurt               33.7
+    ##  7 H                     EU     Greece  GRC   All      Processed mea~       23.6
+    ##  8 H                     EU     Greece  GRC   All      Unprocessed r~       32.1
+    ##  9 H                     EU     Greece  GRC   All      Unprocessed r~       16.9
+    ## 10 H                     EU     Greece  GRC   All      Poultry              28.1
+    ## # i 12,870 more rows
+    ## # i 2 more variables: `Lower confidence interval` <dbl>,
+    ## #   `Upper confidence interval` <dbl>
+
+``` r
+#write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
 ```
