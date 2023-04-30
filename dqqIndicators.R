@@ -8,7 +8,7 @@ library(tidyverse)
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
 glimpse(d)
 names(d)
-write.csv(d, "GallupInputData.csv")
+write.csv(d, "Output/CSV/GallupInputData.csv")
 
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender", 
             "Age", "Education", "IncomeQuintiles", "REG2_GLOBAL", "COUNTRY_ISO3",
@@ -218,7 +218,7 @@ d$snfd <- ifelse((rowSums(d[c("DQQ22","DQQ23", "DQQ24", "DQQ29")] == 1, na.rm=TR
 ### 27. Unprocessed red meat ----
 d$umeat <- ifelse((rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-write_csv(d, "CSV/dqqMain.csv")
+write_csv(d, "Output/CSV/dqqMain.csv")
 
 # 4. Subgroup data set ----
 ## 4.1 data preparation ----
@@ -234,7 +234,7 @@ dsub$REG2_GLOBAL <- REG2_GLOBAL
 
 attributes(dsub$Country) <- NULL
 attributes(dsub$COUNTRY_ISO3) <- NULL
-attributes(dsub$REG2_GLOBAL) <- NULL
+#attributes(dsub$REG2_GLOBAL) <- NULL
 
 
 cntryNames <- dsub$Country
@@ -277,16 +277,17 @@ dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
 longNames <- c(all5 = "All-5", 
                all5a = "At least one vegetable",
                all5b = "At least one fruit",
-               all5c = "At least one pulse, nut or seed",
+               all5c = "At least one pulse, nut, or seed",
                all5d = "At least one animal-source food",
-               all5e = "At least starchy staple",
-               fgds = "Food Group Diversity Score",
+               all5e = "At least one starchy staple",
+               fgds = "Food group diversity score",
                ncdp = "NCD-Protect",
                ncdr = "NCD-Risk",
                gdr = "GDR score",
                DQQ11 = "Baked or grain-based sweets",
                DQQ14 = "Cheese",
                DQQ9 = "Citrus",
+               dairy = "Dairy",
                dveg = "Dark green leafy vegetables",
                DQQ24 = "Deep fried foods",
                DQQ13 = "Eggs",
@@ -334,16 +335,16 @@ dgroup_pivot <- dgroup %>%
   pivot_longer(c(Gender, Urbanicity), values_to = "Subgroup") %>%
   pivot_longer(c(
     all5, all5a, all5b, all5c, all5d, all5e, fgds, ncdp, ncdr, gdr,
-    DQQ11, DQQ14, DQQ9, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ3, mddw,
+    DQQ11, DQQ14, DQQ9, dairy, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ3, mddw,
     anml, DQQ25, DQQ21, ofr, DQQ12, oveg, DQQ22, DQQ19, DQQ16, DQQ4, safd, snfd,
     swtbev,DQQ28, swtfd, DQQ26, umeat, DQQ18, DQQ17, DQQ8, DQQ5, DQQ3, DQQ2, DQQ15, zvegfr
   ), names_to = "Indicators", values_to = "Values") %>%
   
   # 3. Grouping based on desired columns and summary statistics
-  group_by(Income.classification, Region, Country, ISO3, Subgroup, Indicators) %>%
+  group_by("Income classification" = Income.classification, Region, Country, ISO3, Subgroup, Indicators) %>%
   
   reframe(
-    Prevalence = if (Indicators == "fgds" || Indicators == "ncdp" || Indicators == "ncdr" || Indicators == "gdr") {
+    "Mean/Prevalence" = if (Indicators == "fgds" || Indicators == "ncdp" || Indicators == "ncdr" || Indicators == "gdr") {
       round(mean(Values, na.rm = TRUE), digits = 2) 
     }
     else {

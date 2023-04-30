@@ -2,18 +2,17 @@ DQQ Indicators
 ================
 
 ``` r
-## 1. Required libraries ----
+# DQQ Indicators ----
+
+## 1. Adding the required libraries ----
 library(haven)
 library(tidyverse)
 
 ## 2. Data preparation ----
-# Setting the working directory to your local machine path
-# and save the '...Internal.sav' file in a sub-folder 'Input'
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
-
 #glimpse(d)
 #names(d)
-#write.csv(d, "Output/CSV/GallupInputData.csv")
+write.csv(d, "Output/CSV/GallupInputData.csv")
 
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender", 
             "Age", "Education", "IncomeQuintiles", "REG2_GLOBAL", "COUNTRY_ISO3",
@@ -24,31 +23,32 @@ d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender
             "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", "DQQ22", "DQQ23", "DQQ24", 
             "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
 
-##  3. DQQ Indicators  ----
+
+##  3. DQQ-based Indicators  ----
 ###  1. MDD-W and FGDS  ----
 ####  1.1 FGDS  ----
 d$fgds <- (rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) + 
-          (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ14","DQQ15", "DQQ25")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ16","DQQ17", "DQQ18", "DQQ19","DQQ20")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ13")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ5","DQQ8")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-          (rowSums(d[c("DQQ9","DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0) 
+  (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ14","DQQ15", "DQQ25")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ16","DQQ17", "DQQ18", "DQQ19","DQQ20")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ13")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ5","DQQ8")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ9","DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0) 
 
 ####  1.2 MDD-W  ----
 d$mddw <- ifelse(((rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) + 
-                     (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ14","DQQ15", "DQQ25")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ16","DQQ17", "DQQ18", "DQQ19","DQQ20")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ13")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ5","DQQ8")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-                     (rowSums(d[c("DQQ9","DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 5 & d$Gender == 2 &  d$Age >= 15 & d$Age <= 49, 1, 
+                    (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ14","DQQ15", "DQQ25")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ16","DQQ17", "DQQ18", "DQQ19","DQQ20")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ13")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ5","DQQ8")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+                    (rowSums(d[c("DQQ9","DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 5 & d$Gender == 2 &  d$Age >= 15 & d$Age <= 49, 1, 
                  
                  ifelse(((rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) + 
                            (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
@@ -82,46 +82,46 @@ d$all5e <- ifelse((rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) ==
 
 ### 3. NCD-Protect score  ----
 d$ncdp <- (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0) + 
-           (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-           (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
-           (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)
+  (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)
 
 ### 4. NCD-Risk score  ----
 d$ncdr <- (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) + 
-           (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ24")] == 1, na.rm=TRUE) > 0) +
-           (rowSums(d[c("DQQ23", "DQQ29")] == 1, na.rm=TRUE) > 0)+
-           (rowSums(d[c("DQQ22")] == 1, na.rm=TRUE) > 0)
+  (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ24")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ23", "DQQ29")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ22")] == 1, na.rm=TRUE) > 0)
 
 ### 5. GDR score  ----
 d$gdr <- (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0) + 
-         (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
-         (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
-         (rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) +
-         (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-         (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-         (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-         (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-         (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
-         (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)-
-         (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) - 
-         (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ24")] == 1, na.rm=TRUE) > 0) -
-         (rowSums(d[c("DQQ23", "DQQ29")] == 1, na.rm=TRUE) > 0)-
-         (rowSums(d[c("DQQ22")] == 1, na.rm=TRUE) > 0)+ 9*TRUE
+  (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+  (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
+  (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)-
+  (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) - 
+  (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ24")] == 1, na.rm=TRUE) > 0) -
+  (rowSums(d[c("DQQ23", "DQQ29")] == 1, na.rm=TRUE) > 0)-
+  (rowSums(d[c("DQQ22")] == 1, na.rm=TRUE) > 0)+ 9*TRUE
 
 ### 6. DQQ score  ----
 
@@ -157,41 +157,41 @@ d$pmeat <- ifelse((rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
 ### 16. WHO-FV score   ----
 d$whofv <- ifelse(((rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) + 
-                    (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-                    (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-                    (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-                    (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
-                    (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 3, 1, 0)
+                     (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+                     (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+                     (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
+                     (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
+                     (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 3, 1, 0)
 
 ### 17. WHO-Fiber score  ----
 d$whofib <- ifelse(((rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) + 
-                       (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 4, 1, 0)
+                      (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
+                      (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
+                      (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ4")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ21")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)) >= 4, 1, 0)
 
 ### 18. WHO-Sugar score  ----
 d$whosug <- ifelse(((rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ27")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ26")] == 1, na.rm=TRUE) > 0) +
-                       (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0)+
-                       (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0)) >= 2, 1, 0)
+                      (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) +
+                      (rowSums(d[c("DQQ27")] == 1, na.rm=TRUE) > 0) +
+                      (rowSums(d[c("DQQ26")] == 1, na.rm=TRUE) > 0) +
+                      (rowSums(d[c("DQQ11")] == 1, na.rm=TRUE) > 0)+
+                      (rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0)) >= 2, 1, 0)
 
 ### 19. WHO-Saturated fat score  ----
 d$whosfat <- ifelse(((rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) +
-                         (rowSums(d[c("DQQ14", "DQQ15")] == 1, na.rm=TRUE) > 0) +
-                         (rowSums(d[c("DQQ25")] == 1, na.rm=TRUE) > 0) +
-                         (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
-                         (rowSums(d[c("DQQ17", "DQQ18")] == 1, na.rm=TRUE) > 0)-
-                         (rowSums(d[c("DQQ20")] == 1, na.rm=TRUE) > 0)-
-                         (rowSums(d[c("DQQ19")] == 1, na.rm=TRUE) > 0)+
-                         (rowSums(d[c("DQQ29")] == 1, na.rm=TRUE) > 0)) >= 2, 1, 0)
+                       (rowSums(d[c("DQQ14", "DQQ15")] == 1, na.rm=TRUE) > 0) +
+                       (rowSums(d[c("DQQ25")] == 1, na.rm=TRUE) > 0) +
+                       (rowSums(d[c("DQQ16")] == 1, na.rm=TRUE) > 0) +
+                       (rowSums(d[c("DQQ17", "DQQ18")] == 1, na.rm=TRUE) > 0)-
+                       (rowSums(d[c("DQQ20")] == 1, na.rm=TRUE) > 0)-
+                       (rowSums(d[c("DQQ19")] == 1, na.rm=TRUE) > 0)+
+                       (rowSums(d[c("DQQ29")] == 1, na.rm=TRUE) > 0)) >= 2, 1, 0)
 
 ### 20. Percent consuming each food group   ----
 #### 20.a. at least one vegetable or fruit   ----
@@ -201,58 +201,39 @@ d$vegfr <- ifelse((rowSums(d[c("DQQ5","DQQ6_1","DQQ6_2", "DQQ7_1", "DQQ7_2", "DQ
 d$snf <- ifelse((rowSums(d[c("DQQ22","DQQ23","DQQ29")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
 ### Some complementary indicators ----
-#### 21. Dairy ----
+### 21. Dairy ----
 d$dairy <- ifelse((rowSums(d[c("DQQ14","DQQ15","DQQ25")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 22. Dark green leafy vegetables ----
+### 22. Dark green leafy vegetables ----
 d$dveg <- ifelse((rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 23. Animal-based food ----
+### 23. Animal-based food ----
 d$anml <- ifelse((rowSums(d[c("DQQ17","DQQ18", "DQQ19", "DQQ20")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 24. Other fruits ----
+### 24. Other fruits ----
 d$ofr <- ifelse((rowSums(d[c("DQQ10_1","DQQ10_2")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 25. Other vegetables ----
+### 25. Other vegetables ----
 d$oveg <- ifelse((rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 26. Salty snacks, instant noodles, or fast food (including deep fried) ----
+### 26. Salty snacks, instant noodles, or fast food (including deep fried) ----
 d$snfd <- ifelse((rowSums(d[c("DQQ22","DQQ23", "DQQ24", "DQQ29")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 27. Unprocessed red meat ----
+### 27. Unprocessed red meat ----
 d$umeat <- ifelse((rowSums(d[c("DQQ17","DQQ18")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-# In case you want a csv output at this stage, create 'output' sub-folder
-# in your main directory and save the csv there. 
-#write_csv(d, "Output/CSV/dqqMain.csv")
+write_csv(d, "Output/CSV/dqqMain.csv")
 
 # 4. Subgroup data set ----
-## 4.1 Data preparation ----
+## 4.1 data preparation ----
+
 #attr(d$REG2_GLOBAL, "labels")
 #attributes(d$REG2_GLOBAL)
 
 dsub <- d %>%
   group_by(Country, REG2_GLOBAL, COUNTRY_ISO3) %>%
   reframe(n= n())
-dsub
-```
 
-    ## # A tibble: 56 x 4
-    ##    Country                  REG2_GLOBAL COUNTRY_ISO3     n
-    ##    <chr>                      <dbl+lbl> <chr>        <int>
-    ##  1 Afghanistan  3 [Asia]                AFG           1000
-    ##  2 Albania      1 [Europe]              ALB           1000
-    ##  3 Armenia      2 [Former Soviet Union] ARM           1003
-    ##  4 Azerbaijan   2 [Former Soviet Union] AZE           1008
-    ##  5 Bangladesh   3 [Asia]                BGD           1000
-    ##  6 Benin        6 [Sub-Saharan Africa]  BEN           1000
-    ##  7 Bolivia      4 [Americas]            BOL           1002
-    ##  8 Burkina Faso 6 [Sub-Saharan Africa]  BFA           1000
-    ##  9 Cambodia     3 [Asia]                KHM           1000
-    ## 10 Cameroon     6 [Sub-Saharan Africa]  CMR           1000
-    ## # i 46 more rows
-
-``` r
 REG2_GLOBAL <- fct_collapse(as.factor(dsub$REG2_GLOBAL), "EU" = "1", "FSU" = "2", "AS" = "3", "AM" = "4", "MENA" = "5", "SSA" = "6")
 dsub$REG2_GLOBAL <- REG2_GLOBAL
 
@@ -271,34 +252,9 @@ cntryIncome <- c("L", "UM", "UM", "UM", "LM", "L", "LM", "L", "LM", "LM", "L", "
 ## 4.2 New columns ----
 newcols <- data.frame(Country = cntryNames, ISO3 = cntryISO3, Region = cntryRegion, "Income classification" = cntryIncome)
 dgroup <- left_join(d, newcols, by= "Country")
-dgroup
-```
+write.csv(dgroup, "Output/CSV/dgroup.csv")
 
-    ## # A tibble: 63,663 x 93
-    ##        STRATA   PSU    CaseID Weight FieldDate  Country   Gender   Age Education
-    ##         <dbl> <dbl>     <dbl>  <dbl> <date>     <chr>   <dbl+lb> <dbl> <dbl+lbl>
-    ##  1 6016100001    NA 156401410  0.837 2021-09-01 Jordan  2 [Fema~ 20 [] 2 [Secon~
-    ##  2 6016100003    NA 146229283  1.25  2021-09-01 Jordan  1 [Male] 33 [] 2 [Secon~
-    ##  3 6016100001    NA 145290048  1.73  2021-09-01 Jordan  1 [Male] 42 [] 2 [Secon~
-    ##  4 6016100003    NA 122320736  1.47  2021-09-01 Jordan  2 [Fema~ 45 [] 2 [Secon~
-    ##  5 6016100002    NA 126870248  0.811 2021-09-01 Jordan  2 [Fema~ 53 [] 2 [Secon~
-    ##  6 6016100003    NA 129779287  0.376 2021-09-01 Jordan  1 [Male] 55 [] 2 [Secon~
-    ##  7 6016100001    NA 118970612  0.439 2021-09-01 Jordan  1 [Male] 37 [] 2 [Secon~
-    ##  8 6016100001    NA 119053810  1.69  2021-09-01 Jordan  2 [Fema~ 60 [] 1 [Compl~
-    ##  9 6016100001    NA 157748114  0.645 2021-09-01 Jordan  2 [Fema~ 30 [] 3 [Compl~
-    ## 10 6016100001    NA 113253386  0.636 2021-09-01 Jordan  2 [Fema~ 64 [] 2 [Secon~
-    ## # i 63,653 more rows
-    ## # i 84 more variables: IncomeQuintiles <dbl+lbl>, REG2_GLOBAL <dbl+lbl>,
-    ## #   COUNTRY_ISO3 <chr>, Urbanicity <dbl+lbl>, DQQ1 <dbl+lbl>, DQQ2 <dbl+lbl>,
-    ## #   DQQ3 <dbl+lbl>, DQQ4 <dbl+lbl>, DQQ5 <dbl+lbl>, DQQ6_1 <dbl+lbl>,
-    ## #   DQQ6_2 <dbl+lbl>, DQQ7_1 <dbl+lbl>, DQQ7_2 <dbl+lbl>, DQQ7_3 <dbl+lbl>,
-    ## #   DQQ8 <dbl+lbl>, DQQ9 <dbl+lbl>, DQQ10_1 <dbl+lbl>, DQQ10_2 <dbl+lbl>,
-    ## #   DQQ11 <dbl+lbl>, DQQ12 <dbl+lbl>, DQQ13 <dbl+lbl>, DQQ13_IND <dbl+lbl>, ...
-
-``` r
-#write.csv(dgroup, "Output/CSV/dgroup.csv")
-
-## 4.3 Functions for upper/lower confidence ----
+## 4.3 Functions for upper/lower confidence (proportional sampling) ----
 ### 4.3.1 Upper confidence interval ----
 upconf <- function(x){
   mean(x == 1, na.rm = TRUE)*100 + 
@@ -313,52 +269,30 @@ lowconf <- function(x){
                            (100-(mean(x == 1, na.rm = TRUE)*100)))/length(na.omit(x)))
 }
 
-### 4.4 Setting labels for Urbanicity and Gender ----
+### 4.4 Seeting labels for 'Urbanicity' and 'Gender' ----
 Gender <- fct_collapse(as.factor(dgroup$Gender), "Male" = "1", "Female" = "2")
 dgroup$Gender <- Gender
 
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
 dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
-dgroup
-```
 
-    ## # A tibble: 63,579 x 93
-    ##        STRATA   PSU    CaseID Weight FieldDate  Country Gender     Age Education
-    ##         <dbl> <dbl>     <dbl>  <dbl> <date>     <chr>   <fct>  <dbl+l> <dbl+lbl>
-    ##  1 6016100001    NA 156401410  0.837 2021-09-01 Jordan  Female   20 [] 2 [Secon~
-    ##  2 6016100003    NA 146229283  1.25  2021-09-01 Jordan  Male     33 [] 2 [Secon~
-    ##  3 6016100001    NA 145290048  1.73  2021-09-01 Jordan  Male     42 [] 2 [Secon~
-    ##  4 6016100003    NA 122320736  1.47  2021-09-01 Jordan  Female   45 [] 2 [Secon~
-    ##  5 6016100002    NA 126870248  0.811 2021-09-01 Jordan  Female   53 [] 2 [Secon~
-    ##  6 6016100003    NA 129779287  0.376 2021-09-01 Jordan  Male     55 [] 2 [Secon~
-    ##  7 6016100001    NA 118970612  0.439 2021-09-01 Jordan  Male     37 [] 2 [Secon~
-    ##  8 6016100001    NA 119053810  1.69  2021-09-01 Jordan  Female   60 [] 1 [Compl~
-    ##  9 6016100001    NA 157748114  0.645 2021-09-01 Jordan  Female   30 [] 3 [Compl~
-    ## 10 6016100001    NA 113253386  0.636 2021-09-01 Jordan  Female   64 [] 2 [Secon~
-    ## # i 63,569 more rows
-    ## # i 84 more variables: IncomeQuintiles <dbl+lbl>, REG2_GLOBAL <dbl+lbl>,
-    ## #   COUNTRY_ISO3 <chr>, Urbanicity <fct>, DQQ1 <dbl+lbl>, DQQ2 <dbl+lbl>,
-    ## #   DQQ3 <dbl+lbl>, DQQ4 <dbl+lbl>, DQQ5 <dbl+lbl>, DQQ6_1 <dbl+lbl>,
-    ## #   DQQ6_2 <dbl+lbl>, DQQ7_1 <dbl+lbl>, DQQ7_2 <dbl+lbl>, DQQ7_3 <dbl+lbl>,
-    ## #   DQQ8 <dbl+lbl>, DQQ9 <dbl+lbl>, DQQ10_1 <dbl+lbl>, DQQ10_2 <dbl+lbl>,
-    ## #   DQQ11 <dbl+lbl>, DQQ12 <dbl+lbl>, DQQ13 <dbl+lbl>, DQQ13_IND <dbl+lbl>, ...
 
-``` r
 #### 4.5 Indicators long names ----
 longNames <- c(all5 = "All-5", 
                all5a = "At least one vegetable",
                all5b = "At least one fruit",
-               all5c = "At least one pulse, nut or seed",
+               all5c = "At least one pulse, nut, or seed",
                all5d = "At least one animal-source food",
-               all5e = "At least starchy staple",
-               fgds = "Food Group Diversity Score",
+               all5e = "At least one starchy staple",
+               fgds = "Food group diversity score",
                ncdp = "NCD-Protect",
                ncdr = "NCD-Risk",
                gdr = "GDR score",
                DQQ11 = "Baked or grain-based sweets",
                DQQ14 = "Cheese",
                DQQ9 = "Citrus",
+               dairy = "Dairy",
                dveg = "Dark green leafy vegetables",
                DQQ24 = "Deep fried foods",
                DQQ13 = "Eggs",
@@ -406,16 +340,16 @@ dgroup_pivot <- dgroup %>%
   pivot_longer(c(Gender, Urbanicity), values_to = "Subgroup") %>%
   pivot_longer(c(
     all5, all5a, all5b, all5c, all5d, all5e, fgds, ncdp, ncdr, gdr,
-    DQQ11, DQQ14, DQQ9, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ3, mddw,
+    DQQ11, DQQ14, DQQ9, dairy, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ3, mddw,
     anml, DQQ25, DQQ21, ofr, DQQ12, oveg, DQQ22, DQQ19, DQQ16, DQQ4, safd, snfd,
     swtbev,DQQ28, swtfd, DQQ26, umeat, DQQ18, DQQ17, DQQ8, DQQ5, DQQ3, DQQ2, DQQ15, zvegfr
   ), names_to = "Indicators", values_to = "Values") %>%
   
   # 3. Grouping based on desired columns and summary statistics
-  group_by(Income.classification, Region, Country, ISO3, Subgroup, Indicators) %>%
+  group_by("Income classification" = Income.classification, Region, Country, ISO3, Subgroup, Indicators) %>%
   
   reframe(
-    Prevalence = if (Indicators == "fgds" || Indicators == "ncdp" || Indicators == "ncdr" || Indicators == "gdr") {
+    "Mean/Prevalence" = if (Indicators == "fgds" || Indicators == "ncdp" || Indicators == "ncdr" || Indicators == "gdr") {
       round(mean(Values, na.rm = TRUE), digits = 2) 
     }
     else {
@@ -436,32 +370,12 @@ dgroup_pivot <- dgroup %>%
       round(upconf(Values), digits = 2)  
     }
   )
-  
-  # 4. replacing long names format
+
+# 4. replacing long names format
 dgroup_pivot <- dgroup_pivot %>%
   mutate(
     Indicators = as.character(longNames[dgroup_pivot$Indicators])
   )
-dgroup_pivot
-```
 
-    ## # A tibble: 12,880 x 9
-    ##    Income.classification Region Country ISO3  Subgroup Indicators     Prevalence
-    ##    <chr>                 <fct>  <chr>   <chr> <chr>    <chr>               <dbl>
-    ##  1 H                     EU     Greece  GRC   All      Foods made fr~       75.2
-    ##  2 H                     EU     Greece  GRC   All      Baked or grai~       33.7
-    ##  3 H                     EU     Greece  GRC   All      Other sweets         34.2
-    ##  4 H                     EU     Greece  GRC   All      Eggs                 28.8
-    ##  5 H                     EU     Greece  GRC   All      Cheese               72.4
-    ##  6 H                     EU     Greece  GRC   All      Yogurt               33.7
-    ##  7 H                     EU     Greece  GRC   All      Processed mea~       23.6
-    ##  8 H                     EU     Greece  GRC   All      Unprocessed r~       32.1
-    ##  9 H                     EU     Greece  GRC   All      Unprocessed r~       16.9
-    ## 10 H                     EU     Greece  GRC   All      Poultry              28.1
-    ## # i 12,870 more rows
-    ## # i 2 more variables: `Lower confidence interval` <dbl>,
-    ## #   `Upper confidence interval` <dbl>
-
-``` r
-#write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
+write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
 ```
