@@ -63,7 +63,7 @@ d$all5 <- ifelse(((rowSums(d[c("DQQ1","DQQ2", "DQQ3")] == 1, na.rm=TRUE) > 0) +
                     (rowSums(d[c("DQQ5", "DQQ6_1", "DQQ6_2", "DQQ7_1", "DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
                     (rowSums(d[c("DQQ8","DQQ9", "DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0) +
                     (rowSums(d[c("DQQ4","DQQ21")] == 1, na.rm=TRUE) > 0) +
-                    (rowSums(d[c("DQQ13","DQQ14", "DQQ15", "DQQ17", "DQQ18", "DQQ19", "DQQ20", "DQQ25")] == 1, na.rm=TRUE) > 0)) >= 5, 1, 0)
+                    (rowSums(d[c("DQQ13","DQQ14", "DQQ15", "DQQ17", "DQQ18", "DQQ19", "DQQ20", "DQQ25")] == 1, na.rm=TRUE) > 0)) == 5, 1, 0)
 
 #### 2.a.	At least one vegetable  ----
 d$all5a <- ifelse((rowSums(d[c("DQQ5", "DQQ6_1", "DQQ6_2", "DQQ7_1", "DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
@@ -324,6 +324,37 @@ longNames <- c(all5 = "All-5",
               zvegfr= "Zero vegetable or fruit consumption"
 )
 
+dqqNames <- c(DQQ11 = "DQQ11",
+               DQQ14 = "DQQ14",
+               DQQ9 = "DQQ9",
+               dveg = "DQQ6",
+               DQQ24 = "DQQ24",
+               DQQ13 = "DQQ13",
+               DQQ29 = "DQQ29", 
+               DQQ20 = "DQQ20",
+               DQQ1 = "DQQ1",
+               DQQ27 = "DQQ27",
+               DQQ23 = "DQQ23",
+               DQQ25  = "DQQ25",
+               DQQ21 = "DQQ21",
+               ofr = "DQQ10",
+               DQQ12 = "DQQ12",
+               oveg = "DQQ7",
+               DQQ22 = "DQQ22",
+               DQQ19 = "DQQ19",
+               DQQ16 = "DQQ16",
+               DQQ4  = "DQQ4",
+               DQQ28 = "DQQ28",
+               DQQ26  = "DQQ26",
+               DQQ18 = "DQQ18",
+               DQQ17 = "DQQ17",
+               DQQ8 = "DQQ8",
+               DQQ5 = "DQQ5",
+               DQQ3 = "DQQ3",
+               DQQ2  = "DQQ2",
+               DQQ15  = "DQQ15"
+)
+
 ## 4.6 Constructing the 'subgroup' pivot-long version ----
 dgroup_pivot <- dgroup %>% 
   
@@ -369,7 +400,9 @@ dgroup_pivot <- dgroup %>%
 # 4. replacing long names format
 dgroup_pivot <- dgroup_pivot %>%
   mutate(
+    "DQQ Names" = as.character(dqqNames[dgroup_pivot$Indicators]),
     Indicators = as.character(longNames[dgroup_pivot$Indicators])
-  )
+  ) %>%
+  relocate("DQQ Names", .after = Indicators)
 
 write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)

@@ -321,6 +321,37 @@ longNames <- c(all5 = "All-5",
                zvegfr= "Zero vegetable or fruit consumption"
 )
 
+dqqNames <- c(DQQ11 = "DQQ11",
+               DQQ14 = "DQQ14",
+               DQQ9 = "DQQ9",
+               dveg = "DQQ6",
+               DQQ24 = "DQQ24",
+               DQQ13 = "DQQ13",
+               DQQ29 = "DQQ29", 
+               DQQ20 = "DQQ20",
+               DQQ1 = "DQQ1",
+               DQQ27 = "DQQ27",
+               DQQ23 = "DQQ23",
+               DQQ25  = "DQQ25",
+               DQQ21 = "DQQ21",
+               ofr = "DQQ10",
+               DQQ12 = "DQQ12",
+               oveg = "DQQ7",
+               DQQ22 = "DQQ22",
+               DQQ19 = "DQQ19",
+               DQQ16 = "DQQ16",
+               DQQ4  = "DQQ4",
+               DQQ28 = "DQQ28",
+               DQQ26  = "DQQ26",
+               DQQ18 = "DQQ18",
+               DQQ17 = "DQQ17",
+               DQQ8 = "DQQ8",
+               DQQ5 = "DQQ5",
+               DQQ3 = "DQQ3",
+               DQQ2  = "DQQ2",
+               DQQ15  = "DQQ15"
+)
+
 ## 4.6 Constructing the 'subgroup' pivot-long version ----
 dgroup_pivot <- dgroup %>% 
   
@@ -366,8 +397,10 @@ dgroup_pivot <- dgroup %>%
 # 4. replacing long names format
 dgroup_pivot <- dgroup_pivot %>%
   mutate(
+    "DQQ Names" = as.character(dqqNames[dgroup_pivot$Indicators]),
     Indicators = as.character(longNames[dgroup_pivot$Indicators])
-  )
+  ) %>%
+  relocate("DQQ Names", .after = Indicators)
 
 write.csv(dgroup_pivot, "Output/CSV/dqq Subgroups.csv", row.names = FALSE)
 ```
