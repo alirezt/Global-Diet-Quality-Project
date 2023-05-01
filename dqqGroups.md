@@ -10,8 +10,6 @@ library(tidyverse)
 
 ## 2. Data preparation ----
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
-#glimpse(d)
-#names(d)
 write.csv(d, "Output/CSV/GallupInputData.csv")
 
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender", 
@@ -226,10 +224,6 @@ write_csv(d, "Output/CSV/dqqMain.csv")
 
 # 4. Subgroup data set ----
 ## 4.1 data preparation ----
-
-#attr(d$REG2_GLOBAL, "labels")
-#attributes(d$REG2_GLOBAL)
-
 dsub <- d %>%
   group_by(Country, REG2_GLOBAL, COUNTRY_ISO3) %>%
   reframe(n= n())
@@ -239,8 +233,6 @@ dsub$REG2_GLOBAL <- REG2_GLOBAL
 
 attributes(dsub$Country) <- NULL
 attributes(dsub$COUNTRY_ISO3) <- NULL
-#attributes(dsub$REG2_GLOBAL) <- NULL
-
 
 cntryNames <- dsub$Country
 cntryISO3 <- dsub$COUNTRY_ISO3
@@ -323,7 +315,7 @@ longNames <- c(all5 = "All-5",
                DQQ17 = "Unprocessed red meat (ruminants)",
                DQQ8 = "Vitamin A-rich fruits",
                DQQ5 = "Vitamin A-rich orange vegetables",
-               DDQ3 = "White roots or tubers",
+               DQQ3 = "White roots or tubers",
                DQQ2  = "Whole grains",
                DQQ15  = "Yogurt",
                zvegfr= "Zero vegetable or fruit consumption"
@@ -340,7 +332,7 @@ dgroup_pivot <- dgroup %>%
   pivot_longer(c(Gender, Urbanicity), values_to = "Subgroup") %>%
   pivot_longer(c(
     all5, all5a, all5b, all5c, all5d, all5e, fgds, ncdp, ncdr, gdr,
-    DQQ11, DQQ14, DQQ9, dairy, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ3, mddw,
+    DQQ11, DQQ14, DQQ9, dairy, dveg, DQQ24, DQQ13, DQQ29, DQQ20, DQQ1, DQQ27, DQQ23, mddw,
     anml, DQQ25, DQQ21, ofr, DQQ12, oveg, DQQ22, DQQ19, DQQ16, DQQ4, safd, snfd,
     swtbev,DQQ28, swtfd, DQQ26, umeat, DQQ18, DQQ17, DQQ8, DQQ5, DQQ3, DQQ2, DQQ15, zvegfr
   ), names_to = "Indicators", values_to = "Values") %>%
