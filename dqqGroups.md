@@ -10,7 +10,6 @@ library(tidyverse)
 
 ## 2. Data preparation ----
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
-write.csv(d, "Output/CSV/GallupInputData.csv")
 
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender", 
             "Age", "Education", "IncomeQuintiles", "REG2_GLOBAL", "COUNTRY_ISO3",
@@ -21,6 +20,7 @@ d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender
             "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", "DQQ22", "DQQ23", "DQQ24", 
             "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
 
+write.csv(d, "Output/CSV/GallupInputData.csv")
 
 ##  3. DQQ-based Indicators  ----
 ###  1. MDD-W and FGDS  ----
@@ -107,7 +107,6 @@ d$gdr <- (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ5")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
-  (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
   (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
   (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
   (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)-
@@ -267,7 +266,7 @@ dgroup$Gender <- Gender
 
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
-dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
+dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused") # 84 obs. were filtered out
 
 
 #### 4.5 Indicators long names ----

@@ -268,8 +268,7 @@ dgroup$Gender <- Gender
 
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
-dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
-# After filtering 84 obs. were filtered out
+dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused") # 84 obs. were filtered out
 
 #### 4.5 Indicators long names ----
 longNames <- c(all5 = "All-5", 
