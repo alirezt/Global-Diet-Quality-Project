@@ -8,7 +8,6 @@ library(tidyverse)
 d = read_sav(file = "Input/DQQ2022/Diet_Quality_032023_INTERNAL.sav")
 glimpse(d)
 names(d)
-write.csv(d, "Output/CSV/GallupInputData.csv")
 
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender", 
             "Age", "Education", "IncomeQuintiles", "REG2_GLOBAL", "COUNTRY_ISO3",
@@ -19,6 +18,7 @@ d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", "FieldDate", "Country", "Gender
             "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", "DQQ22", "DQQ23", "DQQ24", 
             "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
 
+write.csv(d, "Output/CSV/GallupInputData.csv")
 
 ##  3. DQQ-based Indicators  ----
 ###  1. MDD-W and FGDS  ----
@@ -106,7 +106,6 @@ d$gdr <- (rowSums(d[c("DQQ2")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ6_1","DQQ6_2")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ7_1","DQQ7_2", "DQQ7_3")] == 1, na.rm=TRUE) > 0) +
   (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
-  (rowSums(d[c("DQQ8")] == 1, na.rm=TRUE) > 0)+
   (rowSums(d[c("DQQ9")] == 1, na.rm=TRUE) > 0)+
   (rowSums(d[c("DQQ10_1", "DQQ10_2")] == 1, na.rm=TRUE) > 0)-
   (rowSums(d[c("DQQ28")] == 1, na.rm=TRUE) > 0) - 
@@ -193,7 +192,7 @@ d$whosfat <- ifelse(((rowSums(d[c("DQQ12")] == 1, na.rm=TRUE) > 0) +
 #### 20.a. at least one vegetable or fruit   ----
 d$vegfr <- ifelse((rowSums(d[c("DQQ5","DQQ6_1","DQQ6_2", "DQQ7_1", "DQQ7_2", "DQQ7_3", "DQQ8", "DQQ9", "DQQ10_1","DQQ10_2")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
-#### 20.b. ultra-processed salty snacks, instant noodles, or fast food  ----
+#### 20.b. Packaged ultra-processed salty snacks, instant noodles, or fast food  ----
 d$snf <- ifelse((rowSums(d[c("DQQ22","DQQ23","DQQ29")] == 1, na.rm=TRUE) > 0) == TRUE, 1, 0)
 
 ### Some complementary indicators ----
@@ -236,7 +235,6 @@ attributes(dsub$Country) <- NULL
 attributes(dsub$COUNTRY_ISO3) <- NULL
 #attributes(dsub$REG2_GLOBAL) <- NULL
 
-
 cntryNames <- dsub$Country
 cntryISO3 <- dsub$COUNTRY_ISO3
 cntryRegion <- dsub$REG2_GLOBAL
@@ -271,7 +269,7 @@ dgroup$Gender <- Gender
 Urbanicity <- fct_collapse(as.factor(dgroup$Urbanicity), "Rural" = "1", "Rural" = "2", "Urban" = "3", "DK" = "4", "Refused" = "5", "Urban" = "6")
 dgroup$Urbanicity <- Urbanicity
 dgroup <- dgroup %>% filter(Urbanicity != "DK" & Urbanicity != "Refused")
-
+# After filtering 84 obs. were filtered out
 
 #### 4.5 Indicators long names ----
 longNames <- c(all5 = "All-5", 
