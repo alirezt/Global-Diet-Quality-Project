@@ -1,0 +1,9 @@
+Country,Respondent_ID,Gender_Female_1_Male_0,Locality_Urban_1_Rural_0,Age_years,01_Foods_made_from_grains,02_Whole_grains,03_White_roots_or_tubers,04_Pulses,05_Vitamin_A-rich_orange_vegetables,06_Dark_green_leafy_vegetables,07_Other_vegetables,08_Vitamin_A-rich_fruits,09_Citrus,10_Other_fruits,11_Baked_or_grain-based_sweets,12_Other_sweets,13_Eggs,14_Cheese,15_Yogurt,16_Processed_meats,17_Unprocessed_red_meat_ruminant,18_Unprocessed_red_meat_non-ruminant,19_Poultry,20_Fish_or_seafood,21_Nuts_or_seeds,22_Packaged_ultra-processed_salty_snacks,23_Instant_noodles,24_Deep_fried_foods,25_Milk,26_Sweet tea_coffee_or_cocoa,27_Fruit_juice_or_fruit_drinks,28_Soft_drinks,29_Fast_food
+Brazil,1,1,0,44,0,0,1,0,0,1,1,0,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,0,1,1
+Brazil,2,0,1,18,0,1,1,0,1,1,0,1,0,0,0,0,1,1,1,0,1,1,0,1,0,0,1,1,0,0,0,0,1
+Brazil,3,1,1,16,0,1,1,1,0,1,0,1,1,0,0,1,1,0,1,1,0,1,1,1,1,0,1,0,0,0,1,1,1
+Brazil,4,0,0,50,1,1,0,0,1,1,1,0,0,1,0,0,1,0,1,0,1,1,1,0,1,1,1,1,0,0,1,0,0
+Brazil,5,1,1,16,1,0,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,1,1,0,0,1,1,1,0,1,1,1,0
+Brazil,6,0,0,50,1,0,1,0,0,0,1,0,1,1,1,0,1,0,0,1,0,1,1,1,1,0,0,1,1,1,1,0,1
+Brazil,7,1,1,30,1,0,0,1,1,1,0,0,0,0,1,0,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,1,1
+Brazil,8,1,0,44,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,1,1,1,1,0,0,0,0,1,0,1,1,1,0

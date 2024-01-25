@@ -1,0 +1,67 @@
+---
+title: "Old Faithful"
+format: html
+server: shiny
+---
+
+## this is just for illustration 
+
+```{r}
+sliderInput("bins", "Number of bins:", 
+            min = 1, max = 50, value = 30)
+plotOutput("distPlot")
+```
+
+```{r}
+#| context: server
+output$distPlot <- renderPlot({
+  x <- faithful[, 2]  # Old Faithful Geyser data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
+```
+
+## Introduction
+
+In this analysis, we build a model predicting sale prices of houses based on data on houses that were sold in the Duke Forest neighborhood of Durham, NC around November 2020. Let's start by loading the packages we'll use for the analysis.
+
+```{r, warning=FALSE}
+#| label: load-pkgs
+#| code-summary: "Packages"
+#| message: false
+
+library(openintro)  # for data
+library(tidyverse)  # for data wrangling and visualization
+library(knitr)      # for tables
+library(broom)      # for model summary
+```
+
+We present the results of exploratory data analysis in @sec-eda and the regression model in @sec-model.
+
+We're going to do this analysis using literate programming [@knuth1984].
+
+## Exploratory data analysis {#sec-eda}
+
+The data contains `r nrow(duke_forest)` houses. As part of the exploratory analysis let's visualize and summarize the relationship between areas and prices of these houses.
+
+### Data visualization
+
+@fig-histogram shows two histograms displaying the distributions of `price` and `area` individually.
+
+```{r}
+#| label: fig-histogram
+#| fig-cap: "Histograms of individual variables"
+#| fig-subcap:
+#|   - "Histogram of `price`s"
+#|   - "Histogram of `area`s" 
+#| layout-ncol: 2
+#| column: page-right
+
+ggplot(duke_forest, aes(x = price)) +
+  geom_histogram(binwidth = 50000) +
+  labs(title = "Histogram of prices")
+
+ggplot(duke_forest, aes(x = area)) +
+  geom_histogram(binwidth = 250) +
+  labs(title = "Histogram of areas")
+```

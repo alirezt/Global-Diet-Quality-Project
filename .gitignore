@@ -1,0 +1,105 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+Data/Output/
+
+# R-related files
+*.RData
+*.Rhistory
+.Rproj.user/
+
+# Generated files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# R Markdown files
+*.html
+*.pdf
+
+# R environment files
+.Renviron
+.Rprofile
+
+# R package files
+*.tar.gz
+*.tar
+*.Rcheck/
+
+# R Shiny
+.RData
+.Rproj.user/
+.Renviron
+.Rhistory
+.Rapp.history
+.Renviron
+.Rproj
+
+# Temporary files
+.Rhistory
+.Rapp.history
+
+# Logs
+.Rapp.history
+.Rproj
+*.log
+
+# Session Data files
+.RData
+.Rhistory
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# macOS
+.DS_Store
+
+# Rstudio
+.Rproj.user/
+.Rhistory
+
+# Temporary files created by RStudio
+.RDataTmp/
+
+# R crash digests
+.Rpostback
+.Rcheck/
+.Rd2pdf*
+
+# Knitr and R markdown default cache directories
+*_cache/
+*_files/
+
+# Bookdown files
+*_bookdown_files/
+
+# Shiny
+.SHOTCODE/
+shiny-error.log
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code
+.vscode/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
