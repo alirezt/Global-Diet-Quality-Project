@@ -31,37 +31,19 @@ d <- d[ , c("STRATA", "PSU", "CaseID", "Weight",
 # Removing extra space in countries names
 d$Country <- str_trim(d$Country, side = "right")
 
-# Add WP4 for start and end months
+# Add WP4 for start and end dates
 d <- d %>%
   right_join(wp4, by = join_by(CaseID)) %>%
   relocate(WP4, .after = YEAR)
 
-d$WP4 <- format(as.Date(d$WP4/86400, origin = "1582-10-14"), "%Y_%m_%d")
+d$WP4 <- as.Date(d$WP4/86400, origin = "1582-10-14")
 
 d <- d %>%
   group_by(Country, YEAR) %>%
   mutate(
-    Start_month = min(WP4),
-    End_month = max(WP4)
+    Start_month = format(min(WP4), "%d_%m_%Y"),
+    End_month = format(max(WP4), "%d_%m_%Y")
   )
-
-# Check if WP4 matches YEAR
-d %>%
-  mutate(
-    ystart = year(ymd(Start_month)),
-    yend = year(ymd(End_month)),
-    mstart = month(ymd(Start_month)),
-    mend = month(ymd(End_month)),
-    yearmatch = case_when(YEAR == yend ~ "yes", .default = "no")
-  ) %>%
-  filter(yearmatch == "no") %>%
-  count(ystart, yend, mstart, mend, Country, yearmatch) %>%
-  print(n = 80) %>%
-  write_csv("Data/Output/CSV/Countries with unmatched years.csv")
-
-# extract months
-d$Start_month <- month(ymd(d$Start_month))
-d$End_month <- month(ymd(d$End_month))
 
 ## 2.2 Replacing India and Israel DQQ ----
 # Adding DQQ for India and Israel to main global DQQ 
@@ -382,8 +364,8 @@ d$Residence <- ifelse(is.na(d$Residence),
                              ifelse(d$Urbanicity == 3 | d$Urbanicity == 6, "Urban", NA)), d$Residence) 
 
 # 5. Complex Survey design ----
-result1 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_month", "End_month", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
-result2 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_month", "End_month", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
+result1 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
+result2 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
 
 d <- data.frame(d)
 ## 5.1 Main loop ----
@@ -750,7 +732,7 @@ results <- results %>%
   relocate(Unit, .after = DQQ_question) %>%
   rename(Indicator = Variable)
 
-write_csv(results, "DQQ_GWP_2021-2022_06Feb2024.csv")
+write_csv(results, "DQQ_GWP_2021-2022_07Feb2024.csv")
 
 # End ----
 
