@@ -1,4 +1,5 @@
 #########   Code to Calculate DQQ indicators and national level results from the Gallup World Poll   #########
+# Internal version 
 
 # 1. Loading required libraries ----
 library(haven)
@@ -364,8 +365,8 @@ d$Residence <- ifelse(is.na(d$Residence),
                              ifelse(d$Urbanicity == 3 | d$Urbanicity == 6, "Urban", NA)), d$Residence) 
 
 # 5. Complex Survey design ----
-result1 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
-result2 <- setNames(data.frame(matrix(ncol = 12, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI"))
+result1 <- setNames(data.frame(matrix(ncol = 16, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
+result2 <- setNames(data.frame(matrix(ncol = 16, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
 
 d <- data.frame(d)
 ## 5.1 Main loop ----
@@ -456,7 +457,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x, digits = 2), 
                                   round(x_LCI, digits = 2), 
-                                  round(x_UCI, digits = 2)))
+                                  round(x_UCI, digits = 2),
+                                  as.numeric(round(t$estimate, digits = 2)), 
+                                  as.numeric(round(t$conf.int[1], digits = 2)), 
+                                  as.numeric(round(t$conf.int[2], digits = 2)), 
+                                  as.numeric(round(t$p.value, digits = 2))))
       
       #  # Female
       x <- svymean(~d_f[, i],  d_f_w, na.rm = TRUE, method = "as", df=degf(d_f_w))
@@ -473,7 +478,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x, digits = 2), 
                                   round(x_LCI, digits = 2), 
-                                  round(x_UCI, digits = 2)))
+                                  round(x_UCI, digits = 2),
+                                  as.numeric(round(t$estimate, digits = 2)), 
+                                  as.numeric(round(t$conf.int[1], digits = 2)), 
+                                  as.numeric(round(t$conf.int[2], digits = 2)), 
+                                  as.numeric(round(t$p.value, digits = 2))))
       
       #  # Urban
       x <- svymean(~d_u[, i],  d_u_w, na.rm = TRUE, method = "as", df=degf(d_u_w))
@@ -492,7 +501,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x, digits = 2), 
                                   round(x_LCI, digits = 2), 
-                                  round(x_UCI, digits = 2)))
+                                  round(x_UCI, digits = 2),
+                                  as.numeric(round(t$estimate, digits = 2)), 
+                                  as.numeric(round(t$conf.int[1], digits = 2)), 
+                                  as.numeric(round(t$conf.int[2], digits = 2)), 
+                                  as.numeric(round(t$p.value, digits = 2))))
       
       #  # Rural
       x <- svymean(~d_r[, i],  d_r_w, na.rm = TRUE, method = "as", df=degf(d_r_w))
@@ -509,7 +522,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x, digits = 2), 
                                   round(x_LCI, digits = 2), 
-                                  round(x_UCI, digits = 2)))
+                                  round(x_UCI, digits = 2),
+                                  as.numeric(round(t$estimate, digits = 2)), 
+                                  as.numeric(round(t$conf.int[1], digits = 2)), 
+                                  as.numeric(round(t$conf.int[2], digits = 2)), 
+                                  as.numeric(round(t$p.value, digits = 2))))
       
     }
     #prevalence
@@ -556,7 +573,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x*100, digits = 2), 
                                   round(x_LCI*100, digits = 2), 
-                                  round(x_UCI*100, digits = 2)))
+                                  round(x_UCI*100, digits = 2),
+                                  round((x-y)*100, digits = 2), 
+                                  NA, 
+                                  NA, 
+                                  ifelse(is.na(t), NA, round(as.numeric(t$p.value), digits = 2))))
       
       result2 <- rbind(result2, c(unique(as.character(curdat$Income.classification[curdat$Country == curcountry])), 
                                   unique(as.character(curdat$Region[curdat$Country == curcountry])), 
@@ -570,7 +591,11 @@ for (j in unique(d$YEAR)){
                                   round(y*100, digits = 2), 
                                   round(y_LCI*100, digits = 2), 
                                   round(y_UCI*100, digits = 2), 
-                                  round((x-y)*100, digits = 2)))
+                                  round((x-y)*100, digits = 2),
+                                  round((x-y)*100, digits = 2), 
+                                  NA, 
+                                  NA, 
+                                  ifelse(is.na(t), NA, round(as.numeric(t$p.value), digits = 2))))
       
       # Rural and Urban
       x <- svyciprop(~I(d_u[, i] == 1), d_u_w, na.rm = TRUE, method = "as", df=degf(d_u_w))
@@ -595,7 +620,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(x*100, digits = 2), 
                                   round(x_LCI*100, digits = 2), 
-                                  round(x_UCI*100, digits = 2)))
+                                  round(x_UCI*100, digits = 2),
+                                  round((x-y)*100, digits = 2), 
+                                  NA, 
+                                  NA, 
+                                  ifelse(is.na(t), NA, round(as.numeric(t$p.value), digits = 2))))
       
       result2 <- rbind(result2, c(unique(as.character(curdat$Income.classification[curdat$Country == curcountry])), 
                                   unique(as.character(curdat$Region[curdat$Country == curcountry])), 
@@ -608,7 +637,11 @@ for (j in unique(d$YEAR)){
                                   end_m,
                                   round(y*100, digits = 2), 
                                   round(y_LCI*100, digits = 2), 
-                                  round(y_UCI*100, digits = 2)))
+                                  round(y_UCI*100, digits = 2),
+                                  round((x-y)*100, digits = 2), 
+                                  NA, 
+                                  NA, 
+                                  ifelse(is.na(t), NA, round(as.numeric(t$p.value), digits = 2))))
       
     }
   }
@@ -732,7 +765,7 @@ results <- results %>%
   relocate(Unit, .after = DQQ_question) %>%
   rename(Indicator = Variable)
 
-write_csv(results, "DQQ_GWP_2021-2022_07Feb2024.csv")
+write_csv(results, "DQQ_GWP_2021-2022_Internal_17Feb2024.csv")
 
 # End ----
 
