@@ -1,4 +1,5 @@
 #########   Code to Calculate DQQ indicators and national level results from the Gallup World Poll   #########
+# Internal version
 
 # 1. Loading required libraries ----
 library(haven)
