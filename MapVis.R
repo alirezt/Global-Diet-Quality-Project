@@ -26,15 +26,15 @@ datat <-  dqData %>%
 
 dqq_worldt <- rnaturalearth::ne_countries(returnclass = "sf", scale = 110) %>% 
   left_join(datat, by = join_by(iso_a3 == ISO3)) %>%
-  mutate(`Mean/Prevalence` = `Mean/Prevalence`*100)
+  mutate(Mean_prevalence = Mean_prevalence*100)
 
 ## 2. sf plotting with increasing complexity ----
 plot(st_geometry(dqq_worldt))
 plot(st_geometry(dqq_worldt), col = sf.colors(12, categorical = TRUE), border = 'grey', 
      axes = TRUE)
 plot(dqq_worldt, max.plot = 4)
-plot(dqq_worldt["Mean/Prevalence"])
-plot(dqq_worldt["Mean/Prevalence"],
+plot(dqq_worldt["Mean_prevalence"])
+plot(dqq_worldt["Mean_prevalence"],
      key.pos = 4, 
      axes = FALSE,
      #pal = hcl.colors(10, "Dark Mint", rev = FALSE),
@@ -44,7 +44,7 @@ plot(dqq_worldt["Mean/Prevalence"],
      )
 
 ## 3. Trying with cutting the mean vector into 4 groups ----
-dqq_worldt$meanF <- cut(dqq_worldt$`Mean/Prevalence`, breaks = 20)
+dqq_worldt$meanF <- cut(dqq_worldt$Mean_prevalence, breaks = 20)
 plot(dqq_worldt[-which(dqq_worldt$sovereignt == "Antarctica"), ]["meanF"], 
      key.pos = 4, 
      #pal = hcl.colors(20, "Dark Mint", rev = TRUE),
@@ -74,7 +74,7 @@ dat1 <-  dat %>%
 ## 1.scale_fill_viridis_c ----
 dat1 %>%
   ggplot() +
-  geom_sf(aes(fill = `Mean/Prevalence`), color = "black") +
+  geom_sf(aes(fill = Mean_prevalence), color = "black") +
   #geom_sf_text(aes(label = ISO3), size = 2)
   #geom_sf_label(aes(label = ISO3), size = 1.5) +
   scale_fill_viridis_c(option = "plasma", direction = -1, na.value = "white") +
@@ -86,7 +86,7 @@ dat1 %>%
 names(dat1); class(dat1)
 
 ## ** point ** ----
-quantiles <- quantile(x = dat1$`Mean/Prevalence`, 
+quantiles <- quantile(x = dat1$Mean_prevalence, 
                       probs = seq(0, 1, 0.2), # numeric vector of probabilities 
                       na.rm = TRUE) %>% as.vector()
 
@@ -97,30 +97,10 @@ labels <- imap_chr(quantiles, function(x, idx){
 labels <- labels[1:length(labels) - 1]
 
 dat1 %<>%
-  mutate(mean_quantiles = cut(`Mean/Prevalence`,
+  mutate(mean_quantiles = cut(Mean_prevalence,
                               breaks = quantiles,
                               labels = labels,
                               include.lowest = T))
-
-### setting the font ----
-if(.Platform$OS.type == "windows") {
-  
-  ft.url = "https://www.cufonfonts.com/download/font/whitney-2"
-  dir.create(file.path(getwd(), "font"))
-  download.file("https://www.cufonfonts.com/download/font/whitney-2", 
-                "font/whitney-2.zip", mode = "wb")
-  unzip(file.path("font/whitney-2.zip"), exdir = paste("font", basename(ft.url), sep = "/"))
-  font_paths("font/whitney-2")
-  font_add("Whitney", 
-           regular = "whitneybook.otf", 
-           bold = "whitneybold.otf",
-           italic = "whitneybookitalic.otf", 
-           bolditalic = "whitneysemibold.otf")
-  
-  showtext_auto()
-  par(family = "Whitney")
-  
-}
 
 ### try discrete ----
 dat1 %>%
@@ -172,7 +152,7 @@ dat1 %>%
 ### try continuous ----
 dat1 %>%
   ggplot() +
-  geom_sf(aes(fill = `Mean/Prevalence`), color = "black", size = 0.5) +
+  geom_sf(aes(fill = Mean_prevalence), color = "black", size = 0.5) +
   scale_fill_viridis(
     option = "turbo",
     #na.translate = TRUE,
@@ -191,7 +171,7 @@ dat1 %>%
 
 dat1 %>%
   ggplot() +
-  geom_sf(aes(fill = `Mean/Prevalence`), color = "black", size = 0.5) +
+  geom_sf(aes(fill = Mean_prevalence), color = "black", size = 0.5) +
   scale_fill_gradientn(name="% inadequate",
                        #labels=scales::percent, #lim=c(0,1),
                        colors=RColorBrewer::brewer.pal(9, "Spectral") %>% rev(),
@@ -227,7 +207,7 @@ server <- function(input, output, session){
   
   quantiles <- reactive({
     dat3() %>%
-      pull(var = `Mean/Prevalence`) %>%
+      pull(var = Mean_prevalence) %>%
       quantile(probs = seq(0, 1, length.out = input$quant +1), na.rm = TRUE) %>% 
       as.vector()
   })
@@ -241,7 +221,7 @@ server <- function(input, output, session){
   dat4 <- reactive({
     mylabels <- labels()[1:length(labels()) - 1]
     dat3() %>%
-      mutate(mean_quantiles = cut(`Mean/Prevalence`,
+      mutate(mean_quantiles = cut(Mean_prevalence,
                                   breaks = quantiles(),
                                   labels = mylabels,
                                   include.lowest = T))
@@ -301,18 +281,21 @@ server <- function(input, output, session){
 shinyApp(ui, server)
  
 
-# 4. urban-rural, male-female differences ----
-dat <- read_csv("C:/Users/Niloofarfr/OneDrive - McGill University/R Projects/DQQ/Data/Output/CSV/results_internal_unmerged_NA_Revised_n.csv")
+# 4. Difference Maps ----
+dat <- read_csv("DQQ_GWP_2021-2022_Internal_17Feb2024.csv")
 names(dat)
   
 ## 4.1 data preparation ----
+shp <- rnaturalearth::ne_countries(returnclass = "sf", scale = 110)
+
+# Example: Soft Drink for Male
 dat_dif <-  dat %>%
-  filter(Indicator == "Sugar-sweetened soft drink consumption" & Diff_p < 0.05 & Subgroup == "Male") %>%
+  filter(Indicator == "Soft drink consumption" & Diff_p < 0.05 & Subgroup == "Male") %>%
   right_join(shp[ , c("geometry", "iso_a3")], by = join_by(ISO3 == iso_a3)) %>%
   filter(ISO3 != "ATA") %>%
   st_as_sf()
-  
-## 4.2 use of quantile  ----
+ 
+## 4.2 Quantile for discrete version  ----
 quantiles <- quantile(x = dat_dif$Difference, 
                       probs = seq(0, 1, 0.2),
                       na.rm = TRUE) %>% as.vector()
@@ -360,8 +343,8 @@ dat_dif %>%
                              keywidth = unit(16, units = "mm"))) +
   labs(x = NULL,
        y = NULL,
-       title = "FGDS Gender Differences Map",
-       subtitle = "Global distribution of differences between male and female FGDS",
+       title = "Soft Drink Consumption Gender Differences Map",
+       subtitle = "Global distribution of differences between male and female for Sfot Drink for year 2021 and 2022",
        caption = "Map CC-BY-SA; Code:github.com/alirezt") +
   
   theme_minimal() +
@@ -381,9 +364,9 @@ dat_dif %>%
     panel.border = element_blank(),
     panel.spacing = unit(c(-.1, 0.2, .2, 0.2), "cm"),
     legend.title = element_blank(),
-    legend.text = element_text(size = 12, hjust = 0, face = "bold", color = "#4f504b", family = "Whitney"),
-    plot.title = element_text(size = 20, hjust = 0.5, color = "#4f504b", family = "Whitney"),
-    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "#4f504b", 
+    legend.text = element_text(size = 8, hjust = 0, face = "bold", color = "#4f504b", family = "Whitney"),
+    plot.title = element_text(size = 16, hjust = 0.5, color = "#4f504b", family = "Whitney"),
+    plot.subtitle = element_text(size = 10, hjust = 0.5, color = "#4f504b", 
                                  margin = margin(b = 0.2, t = -0.1, l = 2, unit = "cm"), debug = F),
     plot.caption = element_text(size = 10, hjust = .5, 
                                 margin = margin(t = 0.2, b = 0, unit = "cm"), color = "#939184")
@@ -392,41 +375,10 @@ dat_dif %>%
 ggsave(filename = "plotdir/FGDS gender differences.png",
        width=8.5, height=4.5, units="in", dpi=200)
 
-## 4.3 try continuous ----
+## 4.3 Continuous ----
 dat_dif %>%
   ggplot() +
-  geom_sf(aes(fill = Difference), color = "black", size = 0.5) + 
-  scale_fill_viridis(
-    option = "turbo",
-    na.value = "white",
-    name = "All-5 ranges",
-    alpha = 0.9, 
-    discrete = F, 
-    direction = -1, # this change the order of color in map
-    guide = guide_legend(
-      keyheight = unit(5, units = "mm"),
-      title.position = "top",
-      #reverse = T 
-    ))
-
-### maps ----
-dat_dif %>%
-  ggplot() +
-  geom_sf(aes(fill = Difference*100), color = "black", size = 2) + # diff_ru and diff_fm
-  
-  #scale_fill_gradient2(name="Urban minus Rural",
-                       #low = "turquoise4", 
-                       #mid = "cornsilk1", 
-                       #high = "brown3",
-                       #midpoint = 0, 
-                       #breaks = c(-15, -10, -5, 0, 5, 10, 15, 20, 25),
-                       #labels = c(-15, -10, -5, 0, 5, 10, 15, 20, 25),
-                       #limits = c(-15, 25),
-                       #na.value = "grey90") +
-  
-  #scale_fill_gradientn(colours = c(rev(brewer.pal(3, "Greens")), brewer.pal(3, "Blues")), 
-                       #na.value = "grey90", trans = "log") +
-  
+  geom_sf(aes(fill = Difference), color = "black", size = 2) +
   scale_fill_gradientn(name="Male minus Female",
                        #labels=scales::percent, #lim=c(0,1),
                        colors = RColorBrewer::brewer.pal(9, "Spectral") %>% rev(),
@@ -460,7 +412,7 @@ dat_dif %>%
     panel.spacing = unit(c(-.1, 0.2, .2, 0.2), "cm"),
     legend.title = element_text(size = 12, face = "bold", color = "#4f504b", family = "Whitney"),
     legend.text = element_text(size = 12, hjust = 0.4, face = "bold", color = "#4f504b", family = "Whitney"),
-    plot.title = element_text(size = 20, hjust = 0.5, color = "#4f504b", family = "Whitney"),
+    plot.title = element_text(size = 16, hjust = 0.5, color = "#4f504b", family = "Whitney"),
     plot.subtitle = element_text(size = 12, hjust = 0.5, color = "#4f504b", 
                                  margin = margin(b = 0.2, t = -0.1, l = 2, unit = "cm"), debug = F),
     plot.caption = element_text(size = 10, hjust = .5, 
@@ -635,17 +587,20 @@ ggsave(filename = "plotdir/test19.png",
 
 # 6. Histograms and counts for NCDR and NCDP ----
 names(dat)
+dat <- data.frame(dat)
 dat %>%
-  select(c("ISO3", "Subgroup", "Indicator", "Mean/Prevalence")) %>%
-  pivot_wider(names_from = Subgroup, values_from = `Mean/Prevalence`) %>%
+  filter(Year == 2021) %>%
+  select(c("ISO3", "Subgroup", "Indicator", "Mean_prevalence")) %>%
+  pivot_wider(names_from = Subgroup, values_from = Mean_prevalence) %>%
   mutate(M_minus_F = Male - Female) %>%
   filter(Indicator == "NCD-Risk") %>%
   ggplot(aes(M_minus_F)) +
   geom_histogram()
 
 dat %>%
-  select(c("ISO3", "Subgroup", "Indicator", "Mean/Prevalence")) %>%
-  pivot_wider(names_from = Subgroup, values_from = `Mean/Prevalence`) %>%
+  filter(Year == 2022) %>%
+  select(c("ISO3", "Subgroup", "Indicator", "Mean_prevalence")) %>%
+  pivot_wider(names_from = Subgroup, values_from = Mean_prevalence) %>%
   mutate(M_minus_F = Male - Female) %>%
   filter(Indicator == "NCD-Protect") %>%
   count(sign(M_minus_F))

@@ -109,10 +109,21 @@ demo_continuous(c(0, 10))
 demo_continuous(c(0, 10), breaks = breaks_extended(3))
 demo_continuous(c(0, 10), breaks = breaks_extended(10))
 
+## Aggregation ----
+# Aggregate with preservation of other variables (possible use of dplyr)
+# Would be possible to compute mean in a row-wise manner and 
+# preserve other variables as well. For instance, to have cat in the output
+# in below example for their corresponding x values
 
+set.seed(8)
+x <- sample(c("A", "B", "C"), 15, replace = T)
+y <- sample(c(2021, 2022), 15, replace = T)
+z <- round(rnorm(15), 2)
+cat <- ifelse(x == "A", "low", ifelse(x == "B", "med", "hight"))
 
+dd <- data.frame(x, y, z, cat)
 
-
+aggregate(z ~ x, dd, mean)
 
 
 
