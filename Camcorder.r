@@ -1,6 +1,6 @@
 library(camcorder)
 gg_record(
-  dir = file.path("Data/Output/Graphs/Cam/Box plots", "UrbanDiff Pmeat_BarPlot_1"), 
+  dir = file.path("Data/Output/Graphs/Cam/ggdist", "Income_ggdist_dotplot4"), 
   device = "png", # device to use to save images
   width = 6,      # width of saved image
   height = 4,     # height of saved image
@@ -9,14 +9,14 @@ gg_record(
 )
 
   gg_resize_film(
-  height = 8,
-  width = 5.1,
+  height = 16,
+  width = 12,
   units = "in",
-  dpi = 300
+  dpi = 96
 )
 
 gg_playback(
-  name = "Data/Output/Graphs/Cam/DDS_All_2.gif",
+  name = "Data/Output/Graphs/Cam/ggdist/Income_ggdist_dotplot4.gif",
   first_image_duration = 5,
   last_image_duration = 15,
   frame_duration = .1,
