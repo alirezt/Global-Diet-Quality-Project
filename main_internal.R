@@ -1,5 +1,5 @@
 #########   Code to Calculate DQQ indicators and national level results from the Gallup World Poll   #########
-# Internal version 
+# Internal version 2024 - 85 countries 
 
 # 1. Loading required libraries ----
 library(haven)
@@ -13,38 +13,22 @@ library(labelled)
 # 2. Data preparation ----
 ## 2.1 Loading and variable-selection ----
   # Paste your SAV file in your working directory
-d= read.spss(paste(getwd(), "DQQ GWP 2021–2022 Microdata.sav", sep = "/"), 
+d= read.spss(paste(getwd(), "Data/raw/DQQ2024/Diet_Quality_EOY_031524.sav/Diet_Quality_EOY_031524.sav", sep = "/"), 
              use.value.labels=F, to.data.frame=TRUE, stringsAsFactors=FALSE)
 
-wp4 <- read_csv("Data/Output/CSV/wp4.csv")
-
 d <- d[ , c("STRATA", "PSU", "CaseID", "Weight", 
-            "YEAR", 
+            "YEAR", "START_DATE", "END_DATE",
             "Country", "Gender", "Age", "Education", "IncomeQuintiles", "COUNTRY_ISO3",
-            "Urbanicity", "DEGURBA_2021_F2F", "DEGURBA_2022", "DEGURBA_2021_PHONE", 
+            "Urbanicity", "DEGURBA_F2F_2021", "DEGURBA_2023", "DEGURBA_PHONE_2021", 
             "DQQ1", "DQQ2", "DQQ3", "DQQ4", "DQQ5", "DQQ6_1", "DQQ6_2", 
             "DQQ7_1", "DQQ7_2", "DQQ7_3", "DQQ8", "DQQ9", "DQQ10_1", "DQQ10_2", "DQQ10_3", "DQQ11", 
             "DQQ12", "DQQ13", "DQQ13_IND", "DQQ14", "DQQ15", "DQQ16", "DQQ16_IND", "DQQ17", 
-            "DQQ17_IND1", "DQQ17_IND2", "DQQ18", "DQQ18_IND1", "DQQ18_IND2", "DQQ19", "DQQ19_IND", 
-            "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", "DQQ22", "DQQ23", "DQQ24", 
-            "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
+            "DQQ17_IND1", "DQQ17_IND2", "DQQ18", "DQQ18_IND1", "DQQ18_IND2", "DQQ18_MYS1", "DQQ18_MYS2",
+            "DQQ19", "DQQ19_IND", "DQQ20", "DQQ20_IND", "DQQ20_ISR1", "DQQ20_ISR2", "DQQ21", 
+            "DQQ22", "DQQ23", "DQQ24", "DQQ25", "DQQ26", "DQQ27", "DQQ28", "DQQ29")]
 
 # Removing extra space in countries names
 d$Country <- str_trim(d$Country, side = "right")
-
-# Add WP4 for start and end dates
-d <- d %>%
-  right_join(wp4, by = join_by(CaseID)) %>%
-  relocate(WP4, .after = YEAR)
-
-d$WP4 <- as.Date(d$WP4/86400, origin = "1582-10-14")
-
-d <- d %>%
-  group_by(Country, YEAR) %>%
-  mutate(
-    Start_month = format(min(WP4), "%d_%m_%Y"),
-    End_month = format(max(WP4), "%d_%m_%Y")
-  )
 
 ## 2.2 Replacing India and Israel DQQ ----
 # Adding DQQ for India and Israel to main global DQQ 
@@ -54,6 +38,8 @@ d$DQQ17 <- ifelse(is.na(d$DQQ17_IND1), d$DQQ17, d$DQQ17_IND1)
 d$DQQ17 <- ifelse(is.na(d$DQQ17_IND2), d$DQQ17, d$DQQ17_IND2)
 d$DQQ18 <- ifelse(is.na(d$DQQ18_IND1), d$DQQ18, d$DQQ18_IND1)
 d$DQQ18 <- ifelse(is.na(d$DQQ18_IND2), d$DQQ18, d$DQQ18_IND2)
+d$DQQ18 <- ifelse(is.na(d$DQQ18_MYS1), d$DQQ18, d$DQQ18_MYS1)
+d$DQQ18 <- ifelse(is.na(d$DQQ18_MYS2), d$DQQ18, d$DQQ18_MYS2)
 d$DQQ19 <- ifelse(is.na(d$DQQ19_IND), d$DQQ19, d$DQQ19_IND)
 d$DQQ20 <- ifelse(is.na(d$DQQ20_IND), d$DQQ20, d$DQQ20_IND)
 d$DQQ20 <- ifelse(is.na(d$DQQ20_ISR1), d$DQQ20, d$DQQ20_ISR1)
@@ -320,13 +306,32 @@ d %<>% mutate(
                     DQQ17 == 1 | DQQ18 == 1 ~ 1L, TRUE ~ NA) 
 )
 
+### 3.24 More than one sugary food or beverage ----
+
+d %<>%
+  mutate(
+    onesu_na = rowSums(is.na(d[, c("DQQ11", "DQQ12", "DQQ26", "DQQ27", "DQQ28")]), na.rm = T),
+    onesu_sum = rowSums((d[, c("DQQ11", "DQQ12", "DQQ26", "DQQ27", "DQQ28")]), na.rm = T),
+    onesu = ifelse((onesu_na == 1 & onesu_sum == 1) | is.na(DQQ28) | onesu_na >= 2, NA, ifelse(onesu_sum > 0 & DQQ28 == 1, 1, 0))
+  )
+
+### 3.25 More than one salty processed food ----
+d %<>%
+  mutate(
+    onesa_na = rowSums(is.na(d[, c("DQQ16", "DQQ22", "DQQ23", "DQQ24", "DQQ29")]), na.rm = T),
+    onesa_sum = rowSums((d[, c("DQQ16", "DQQ22", "DQQ23", "DQQ24", "DQQ29")]), na.rm = T),
+    onesa = ifelse((onesa_na == 1 & onesa_sum == 1) | onesa_na >= 2, NA, ifelse(onesa_sum > 0, 1, 0))
+  )
+
+write.csv(d, "dtest.csv")
+
 # 4. New columns and re-encoding factor variables ----
 ## 4.1 New columns ----
 # Add ISO, Income, and Region
-d$Region <- ifelse(d$Country == "Egypt" | d$Country == "Israel" | d$Country == "Jordan" | d$Country == "Lebanon" | d$Country == "Morocco" | d$Country == "Palestine" | d$Country == "Yemen" | d$Country == "Tunisia", "Middle East and North Africa",
-                   ifelse(d$Country == "Greece" | d$Country == "Kazakhstan" | d$Country == "Russia" | d$Country == "Tajikistan" | d$Country == "Turkey" | d$Country == "Albania" | d$Country == "Armenia" | d$Country == "Azerbaijan" | d$Country == "Kyrgyzstan" | d$Country == "Uzbekistan", "Europe and Central Asia",                                                                   
-                          ifelse(d$Country == "Bangladesh" | d$Country == "Cambodia" | d$Country == "China" | d$Country == "India" | d$Country == "Indonesia" | d$Country == "Laos" | d$Country == "Nepal" | d$Country == "Pakistan" | d$Country == "Philippines" | d$Country == "Sri Lanka" | d$Country == "Vietnam" | d$Country == "Afghanistan", "Asia Pacific",                             
-                                 ifelse(d$Country == "Bolivia" | d$Country == "United States" | d$Country == "Chile" | d$Country == "Colombia" | d$Country == "Ecuador" | d$Country == "Mexico" | d$Country == "Nicaragua" | d$Country == "Honduras", "Americas", "Sub-Saharan Africa"))))
+d$Region <- ifelse(d$Country == "Egypt" | d$Country == "Israel" | d$Country == "Jordan" | d$Country == "Lebanon" | d$Country == "Morocco" | d$Country == "Palestine" | d$Country == "Yemen" | d$Country == "Tunisia" | d$Country == "Iran", "Middle East and North Africa",
+                   ifelse(d$Country == "Greece" | d$Country == "Kazakhstan" | d$Country == "Russia" | d$Country == "Tajikistan" | d$Country == "Turkey" | d$Country == "Albania" | d$Country == "Armenia" | d$Country == "Azerbaijan" | d$Country == "Kyrgyzstan" | d$Country == "Uzbekistan"| d$Country == "Moldova" | d$Country == "Switzerland" | d$Country == "Ukraine", "Europe and Central Asia",                                                                   
+                          ifelse(d$Country == "Bangladesh" | d$Country == "Cambodia" | d$Country == "China" | d$Country == "India" | d$Country == "Indonesia" | d$Country == "Laos" | d$Country == "Nepal" | d$Country == "Pakistan" | d$Country == "Philippines" | d$Country == "Sri Lanka" | d$Country == "Vietnam" | d$Country == "Afghanistan" | d$Country == "Malaysia" | d$Country == "Mongolia" | d$Country == "Myanmar" | d$Country == "Thailand", "Asia Pacific",                             
+                                 ifelse(d$Country == "Bolivia" | d$Country == "United States" | d$Country == "Chile" | d$Country == "Colombia" | d$Country == "Ecuador" | d$Country == "Mexico" | d$Country == "Nicaragua" | d$Country == "Honduras" | d$Country == "Brazil" | d$Country == "Costa Rica" | d$Country == "Dominican Republic" | d$Country == "Guatemala" | d$Country == "Paraguay" | d$Country == "Peru" | d$Country == "Venezuela", "Americas", "Sub-Saharan Africa"))))
 
 
 dsub <- d %>%
@@ -336,11 +341,8 @@ dsub <- d %>%
 # Adding ISO3, Income and Region to main data frame
 cntryNames <- dsub$Country
 cntryISO3 <- dsub$COUNTRY_ISO3
-cntryIncome <- c("Low", "Upper middle", "Upper middle", "Upper middle", "Lower middle", "Lower middle", "Lower middle", "Low", "Lower middle", "Lower middle", "Low", "High", "Upper middle", "Upper middle", "Upper middle", "Lower middle", "Upper middle", "Lower middle", "High", "Lower middle",  
-                 "Lower middle", "Lower middle", "High", "Upper middle", "Upper middle", "Lower middle", "Lower middle", "Lower middle", "Upper middle", "Low", "Low", "Upper middle", "Lower middle", "Low", "Low", "Lower middle","Low", "Lower middle",
-                 "Lower middle", "Lower middle", "Lower middle", "Upper middle", "Lower middle", "Low", "Upper middle", "Lower middle", "Lower middle", "Lower middle", "Lower middle", "Upper middle", "Low", "High", "Lower middle", "Lower middle", "Low", "Lower middle")
-
-newcols <- data.frame(Country = cntryNames, ISO3 = cntryISO3, "Income classification" = cntryIncome)
+cntryIncome <- read.csv("Data/Output/CSV/incomelevel2024.csv", header = F, col.names = "Income classification")
+newcols <- data.frame(Country = cntryNames, ISO3 = cntryISO3, cntryIncome)
 d <- left_join(d, newcols, by= "Country")
 
 ## 4.2 Encoding Gender and Residence ----
@@ -349,16 +351,16 @@ Gender <- fct_collapse(as.factor(d$Gender), "Male" = "1", "Female" = "2")
 d$Gender <- Gender
 
 # Residence
-d$Residence <- ifelse(d$DEGURBA_2021_F2F == 2 | d$DEGURBA_2021_F2F == 3, "Urban",
-                      ifelse(d$DEGURBA_2021_F2F == 1, "Rural", NA)) 
+d$Residence <- ifelse(d$DEGURBA_F2F_2021 == 2 | d$DEGURBA_F2F_2021 == 1, "Urban",
+                      ifelse(d$DEGURBA_F2F_2021 == 3, "Rural", NA)) 
 
 d$Residence <- ifelse(is.na(d$Residence),
-                      ifelse(d$DEGURBA_2022 == 2 | d$DEGURBA_2022 == 3, "Urban",
-                             ifelse(d$DEGURBA_2022 == 1, "Rural", NA)), d$Residence) 
+                      ifelse(d$DEGURBA_2023 == 2 | d$DEGURBA_2023 == 3, "Urban",
+                             ifelse(d$DEGURBA_2023 == 1, "Rural", NA)), d$Residence) 
 
 d$Residence <- ifelse(is.na(d$Residence),
-                      ifelse(d$DEGURBA_2021_PHONE == 2 | d$DEGURBA_2021_PHONE == 3, "Urban",
-                             ifelse(d$DEGURBA_2021_PHONE == 1, "Rural", NA)), d$Residence) 
+                      ifelse(d$DEGURBA_PHONE_2021 == 2 | d$DEGURBA_PHONE_2021 == 1, "Urban",
+                             ifelse(d$DEGURBA_PHONE_2021 == 3, "Rural", NA)), d$Residence) 
 
 d$Residence <- ifelse(is.na(d$Residence),
                       ifelse(d$Urbanicity == 1 | d$Urbanicity == 2, "Rural",
@@ -379,8 +381,8 @@ for (j in unique(d$YEAR)){
     curcountry <- k
     curdat <- dd[dd$Country == curcountry, ]
     # start and end months
-    start_m <- unique(curdat$Start_month)
-    end_m <- unique(curdat$End_month)
+    start_m <- unique(curdat$START_DATE)
+    end_m <- unique(curdat$END_DATE)
     
     # Overall
     # Create weighted object
@@ -759,13 +761,16 @@ results <- results %>%
   mutate(
     DQQ_question = as.character(dqqNames[results$Variable]),
     Variable = as.character(longNames[results$Variable]),
-    Mean_prevalence = case_when(Subgroup == "Male" & Variable == "MDD-W" ~ NA, .default = Mean_prevalence)
+    Mean_prevalence = case_when(Subgroup == "Male" & Variable == "MDD-W" ~ NA, .default = Mean_prevalence),
+    World_bank_income_group = replace(World_bank_income_group, Country == "Venezuela", NA)
   ) %>%
   relocate(DQQ_question, .after = Variable) %>%
   relocate(Unit, .after = DQQ_question) %>%
   rename(Indicator = Variable)
 
-write_csv(results, "DQQ_GWP_2021-2022_Internal_17Feb2024.csv")
+write_csv(results, "DQQ_GWP_2021-2022_2023_Internal_04April2024.csv")
 
 # End ----
+
+
 
