@@ -1,5 +1,5 @@
 #########   Code to Calculate DQQ indicators and national level results from the Gallup World Poll   #########
-# Internal version 2024 - 85 countries 
+# Public version 2024 - 85 countries 
 
 # 1. Loading required libraries ----
 library(haven)
@@ -364,22 +364,22 @@ d$Residence <- ifelse(is.na(d$Residence),
                              ifelse(d$Urbanicity == 3 | d$Urbanicity == 6, "Urban", NA)), d$Residence) 
 
 # 5. Complex Survey design ----
-result1 <- setNames(data.frame(matrix(ncol = 16, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
-result2 <- setNames(data.frame(matrix(ncol = 16, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Year", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
+result1 <- setNames(data.frame(matrix(ncol = 15, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
+result2 <- setNames(data.frame(matrix(ncol = 15, nrow = 1)), c("World_bank_income_group", "Region", "Country", "ISO3", "Subgroup", "Variable", "Start_Date", "End_Date", "Mean_prevalence", "Lower_95_CI", "Upper_95_CI", "Difference", "Diff_LCI", "Diff_UCI", "Diff_p"))
+
+curdat <- d[d$Country == "United States", ]
+head(curdat$START_DATE, n = 1)
+tail(curdat$END_DATE, n = 1)
 
 d <- data.frame(d)
 ## 5.1 Main loop ----
 options(survey.lonely.psu = "adjust")
-for (j in unique(d$YEAR)){
-  year <- j
-  dd <- d[d$YEAR == year,]
-  
-  for(k in unique(dd$Country)){
+for(k in unique(d$Country)){
     curcountry <- k
-    curdat <- dd[dd$Country == curcountry, ]
+    curdat <- d[d$Country == curcountry, ]
     # start and end months
-    start_m <- unique(curdat$START_DATE)
-    end_m <- unique(curdat$END_DATE)
+    start_m <- head(curdat$START_DATE, n = 1)
+    end_m <- tail(curdat$END_DATE, n = 1)
     
     # Overall
     # Create weighted object
@@ -433,7 +433,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "All", 
                                   i,
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x, digits = 2), 
@@ -450,8 +449,7 @@ for (j in unique(d$YEAR)){
                                   curcountry, 
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Male", 
-                                  i, 
-                                  year,
+                                  i,
                                   start_m,
                                   end_m,
                                   round(x, digits = 2), 
@@ -472,7 +470,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Female", 
                                   i, 
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x, digits = 2), 
@@ -495,7 +492,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Urban", 
                                   i, 
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x, digits = 2), 
@@ -516,7 +512,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Rural", 
                                   i,
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x, digits = 2), 
@@ -543,7 +538,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "All", 
                                   i, 
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x*100, digits = 2), 
@@ -567,7 +561,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Male", 
                                   i, 
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x*100, digits = 2), 
@@ -584,7 +577,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Female", 
                                   i, 
-                                  year,
                                   start_m,
                                   end_m,
                                   round(y*100, digits = 2), 
@@ -614,7 +606,6 @@ for (j in unique(d$YEAR)){
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Urban", 
                                   i,
-                                  year,
                                   start_m,
                                   end_m,
                                   round(x*100, digits = 2), 
@@ -630,8 +621,7 @@ for (j in unique(d$YEAR)){
                                   curcountry, 
                                   unique(as.character(curdat$ISO3[curdat$Country == curcountry])),
                                   "Rural", 
-                                  i, 
-                                  year,
+                                  i,
                                   start_m,
                                   end_m,
                                   round(y*100, digits = 2), 
@@ -644,7 +634,7 @@ for (j in unique(d$YEAR)){
       
     }
   }
-}
+
 
 
 ## 5.2 Saving the results ----
@@ -785,23 +775,23 @@ results %<>%
 results %<>%
   relocate(`Indicator number`, .after = DQQ_question)
 
-write_csv(results, "DQQ_GWP_2021-2022_2023_Internal_06April2024.csv")
+write_csv(results, "DQQ_GWP_2021-2022_2023_Public_08April2024.csv")
 
 # End ----
 
 d_a <- d %>%
-  group_by(Country, YEAR) %>%
+  group_by(Country) %>%
   summarise(n = n()) %>%
   mutate(Subgroup = "All")
 
 d_g <- d %>%
-  group_by(Country, YEAR, Gender) %>%
+  group_by(Country, Gender) %>%
   summarise(n = n()) %>%
   mutate(Subgroup = Gender) %>%
   select(-Gender)
 
 d_r <- d %>%
-  group_by(Country, YEAR, Residence) %>%
+  group_by(Country, Residence) %>%
   summarise(n = n()) %>% 
   mutate(Subgroup = Residence) %>%
   select(-Residence)
@@ -809,15 +799,12 @@ d_r <- d %>%
 d_n <- d_g %>% 
   bind_rows(d_r) %>%
   bind_rows(d_a) %>%
-  filter(!is.na(Subgroup)) %>%
-  rename(Year = YEAR) %>%
-  mutate(Year = as.character(Year))
+  filter(!is.na(Subgroup))
 
 results_t <- results %>%
   rename(Mean = Mean_prevalence) %>%
-  left_join(d_n, by = c("Subgroup", "Country", "Year")) %>%
-  relocate(n, .before = Mean) %>%
-  remove_rownames()
+  left_join(d_n, by = c("Subgroup", "Country")) %>%
+  relocate(n, .before = Mean) 
   
-write.csv(results_t, "DQQ_GWP_2021-2022_2023_Internal_08April2024.csv", row.names = F)
-names(results_t)
+write.csv(results_t, "DQQ_GWP_2021-2022_2023_Public_08April2024.csv", row.names = F)
+
