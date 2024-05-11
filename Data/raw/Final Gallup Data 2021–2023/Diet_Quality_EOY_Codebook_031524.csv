@@ -1,0 +1,151 @@
+"Gallup® World Poll Codebook: Data collected for Diet Quality, 2023",,,
+"Copyright © 2023 Gallup, Inc. All rights reserved. This document contains proprietary research, copyrighted materials and literary property of Gallup, Inc. It is for the guidance of your organization only and is not to be copied, quoted, published or divulged to others outside your organization. No changes may be made to this document without the express written permission of Gallup, Inc.",,,
+ ,,,
+CaseID,Random Unique Case ID, , 
+Weight,Weight, , 
+FieldDate,Study Completion Date, , 
+YEAR,Wave Year, , 
+START_DATE,Interview Date, , 
+END_DATE,Interview Date, , 
+Country,Country Name, , 
+COUNTRY_ISO2,Country ISO alpha-2 code, , 
+COUNTRY_ISO3,Country ISO alpha-3 code, , 
+Gender,Gender,1;2,Male;Female
+Age,Age,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50;51;52;53;54;55;56;57;58;59;60;61;62;63;64;65;66;67;68;69;70;71;72;73;74;75;76;77;78;79;80;81;82;83;84;85;86;87;88;89;90;91;92;93;94;95;96;97;98;99;100,<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;<none>;99+;(Refused)
+Education,Education Level,1;2;3;4;5,Completed elementary education or less (up to 8 years of basic education);Secondary - 3 year TertiarySecondary education and some education beyond secondary education (9-15 years of educatio;Completed four years of education beyond high school and/or received a 4-year college degree.;(DK);(RF)
+IncomeQuintiles,Per Capita Income Quintiles,1;2;3;4;5,Poorest 20%;Second 20%;Middle 20%;Fourth 20%;Richest 20%
+STRATA,Sampling Stratification 2, , 
+PSU,Sampling Stage 1 (PSU), , 
+Urbanicity,Urban/Rural,1;2;3;4;5;6,A rural area or on a farm;A small town or village;A large city;(DK);(Refused);A suburb of a large city
+DEGURBA,Degree of Urbanisation,1;2;3;9,Rural areas;Towns and semi-dense areas;Cities;Not available
+DQQ1,Ate Staple Foods Made From Grains Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ2,Ate Whole Grains Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ3,Ate White Roots/Tubers Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ4,Ate Legumes Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ5,Ate Vitamin A-Rich Orange Vegetables Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ6_1,Ate Dark Green Leafy Vegetables (First List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ6_2,Ate Dark Green Leafy Vegetables (Second List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ7_1,Ate Other Types of Vegetables (First List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ7_2,Ate Other Types of Vegetables (Second List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ7_3,Ate Other Types of Vegetables (Third List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ8,Ate Vitamin A-Rich Fruits Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ9,Ate Citrus Fruits Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ10_1,Ate Other Types of Fruits (First List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ10_2,Ate Other Types of Fruits (Second List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ10_3,Ate Other Types of Fruits (Third List) Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ11,Ate Baked Sweets Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ12,Ate Other Types of Sweets Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ13,Ate Eggs Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ13_IND,Ate Eggs Yesterday (India - Religion Is Not Jainism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ14,Ate Cheese Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ15,Ate Yogurt Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ16,Ate Processed Meat Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ16_IND,Ate Processed Meat Yesterday (India - Religion Is Not Jainism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ17,Ate Unprocessed Red Meat-Ruminant Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ17_IND1,Ate Unprocessed Red Meat-Ruminant Yesterday (India - Religion Is Not Jainism or Hinduism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ17_IND2,Ate Unprocessed Red Meat-Ruminant Yesterday (India - Religion Is Hinduism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ18,Ate Unprocessed Red Meat-Non-Ruminant Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ18_IND1,Ate Unprocessed Red Meat-Non-Ruminant Yesterday (India - Religion Is Not Jainism or Islam/Muslim),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ18_IND2,Ate Unprocessed Red Meat-Non-Ruminant Yesterday (India - Religion Is Islam/Muslim),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ18_MYS1,Ate Unprocessed Red Meat-Non-Ruminant Yesterday (Malaysia - Religion is Not  Islam/Muslim),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ18_MYS2,Ate Unprocessed Red Meat-Non-Ruminant Yesterday (Malaysia - Religion is  Islam/Muslim),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ19,Ate Poultry Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ19_IND,Ate Poultry Yesterday (India - Religion Is Not Jainism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ20,Ate Fish and Seafood Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ20_IND,Ate Fish and Seafood Yesterday (India - Religion Is Not Jainism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ20_ISR1,Ate Fish and Seafood Yesterday (Israel - Religion Is Not Judaism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ20_ISR2,Ate Fish and Seafood Yesterday (Israel - Religion Is Judaism),1;2;8;9,Yes;No;(DK);(Refused)
+DQQ21,Ate Nuts and Seeds Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ22,Ate Ultra-Processed Packaged Salty Snacks Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ23,Ate Instant Noodles Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ24,Ate Deep Fried Foods Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ25,Drank Fluid Milk Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ26,Drank Sweetened Tea/Coffee/Milk Drinks Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ27,Drank Fruit Juice Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ28,Drank SSBs/Sodas Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+DQQ29,Got Food From Fast Food Place Yesterday,1;2;8;9,Yes;No;(DK);(Refused)
+RegionAfghanistan,Region2 Afghanistan,1;2;3;4;5;6;7,Central;Northern;South;East;West;North-Eastern;South-Western
+RegionAlbania,Region 2 Albania,1;2;3;98;99,North Albania;Central Albania;South Albania;(DK);(Refused)
+RegionArmenia,Region 2 Armenia,1;2;3;4,Capital;Central Armenia;North Armenia;South Armenia
+RegionAzerbaijan,Region 2 Azerbaijan,1;2;3;4;6,Baku (The Capital);Eastern part;Northern part;Southern part;Western part
+RegionBangladesh,Region Bangladesh,1;2;3;4;5;6;7;8;98;99,Dhaka;Chittagong;Khulna;Rajshahi;Sylhet;Barisal;Rangpur;Mymensingh;(DK);(Refused)
+RegionBenin,Region 2 Benin,1;2;3;4;5;6;7;8;9;10;11;12;98;99,ALIBORI;ATAKORA;ATLANTIQUE;BORGOU;COLLINES;COUFFO;DONGA;LITTORAL;MONO;OUEME;PLATEAUX;ZOU;(DK);(Refused)
+RegionBolivia,Region 2 Bolivia,1;2;3;98;99,Los Llanos;Valles (Valley);Altiplano (High Plateau);(DK);(Refused)
+RegionBotswana,Region 2 Botswana,1;2;3;4;5;6;7;9;10;98;99,Central District;North-West District;Ghanzi District;Kgalagadi District;Kgatleng District;Kweneng District;North-East District;South-East District;Southern District;(DK);(Refused)
+RegionBrazil,Region 2 Brazil,1;2;3;4;5;98;99,South (SU);Southeast (SE);Central-West (CO);North (NO);Northeast (NE);(DK);(Refused)
+RegionBurkinaFaso,Region 2 Burkina Faso,1;2;3;4;5;6;7;8;9;10;11;12;13;98;99,Boucle du Mouhoun;Cascade;Centre;Centre East;Centre North;Centre South;Centre West;East;Hauts Bassins;North;Plateau Central;Sahel;South West;(DK);(Refused)
+RegionCambodia,Region 2 Cambodia,1;2;3;4,Plains Region;Tonle Sap Region;Coastal Region;Plateau and Mountain Region
+RegionCameroon,Region 2 Cameroon,1;2;3;4,Coastal Region;North;South;West
+RegionChad,Region 2 Chad,1;2;3;4;5,North;Center;Southwest;Southeast;City of NDjamena
+RegionChile,Region 2 Chile,1;2;3;4;98;99,Norte (North);Sur (South);Centro (Central);RM;(DK);(Refused)
+RegionChina,Region 2 China,1;2;3;4;5;6;98;99,North;Northeast;East;South Central;Southwest;Northwest;(DK);(Refused)
+RegionColombia,Region2 Colombia,1;2;3;4;5;6;98;99,Bogotá;North Caribbean;Central East;Antioquia/Eje Cafetero;South West;National Territory;(DK);(Refused)
+RegionComoros,Region Comoros,1;2;3,Grande Comore (Ngazidja);Anjouan (Ndzuwani);Moheli (Mwali)
+RegionCongoBrazzaville,Region Congo Brazzaville,1;2;3;4;5;6;7;8;9;10;11;12;98;99,Bouenza;Brazzaville;Cuvette;Cuvette Ouest;Kouilou;Lekoumou;Likouala;Niari;Plateaux;Pool;Sangha;Pointe-Noire;(DK);(Refused)
+RegionCostaRica,Region Costa Rica,1;2;3;4;5;6;7;98;99,San Jose;Alajuela;Cartago;Heredia;Guanacaste;Puntarenas;Limon;(DK);(Refused)
+RegionDominicanRepublic,Region2 Dominican Republic,1;2;3;4;5;6;98;99,National District;Santo Domingo;East Region;North West Region;North East Region;South Region;(DK);(Refused)
+RegionDRC,Region Congo Kinshasa,1;2;3;4;5;6;7;8;9;10;11,Bandundu;Bas Congo;Equateur;Kasai Occidental;Kasai Oriental;Katanga;Kinshasa;Maniema;Nord Kivu;Province Orientale;Sud Kivu
+RegionEcuador,Region 2 Ecuador,1;2;3;98;99,Costa (Coast);Sierra (Mountain);Oriente (East);(DK);(Refused)
+RegionEgypt,Region 2 Egypt,1;2;3;4;98;99,Urban Governorates;Northern Governorates (Nile Delta);Southern Governorates (Upper Egypt);Frontier Governorates;(DK);(Refused)
+RegionEthiopia,Region Ethiopia,1;2;3;4;5;6;7;8;9;10;11;98;99,Addis Abeba;Afar;Amhara;Benishangul;Diredawa;Gambella;Harar;Oromia;Somali;Southern;Tigray;(DK);(Refused)
+RegionGabon,Region Gabon,1;2;3;4;5;6;7;8;9;98;99,Estuaire;Haut-Ogooue;Moyen-Ogooue;Ngounie;Nyanga;Ogooue-Ivindo;Ogooue-Lolo;Ogooue-Maritime;Woleu-Ntem;(DK);(Refused)
+RegionGhana,Region Ghana,1;2;3;4;5;6;7;8;9;10;98;99,ASHANTI;BRONG AHAFO;CENTRAL;EASTERN;GREATER ACCRA;NORTHERN;UPPER EAST;UPPER WEST;VOLTA;WESTERN;(DK);(REFUSED)
+RegionGreece,Region Greece,1;2;3;4;5;6;7;8;9;10;11;12;13;98;99,Attica;Central Greece;Central Macedonia;Crete;East Macedonia and Thrace;Epirus;Ionian Islands;North Aegean;Peloponnese;South Aegean;Thessaly;West Greece;West Macedonia;(DK);(Refused)
+RegionGuatemala,Region 2 Guatemala,1;2;3;4;5;6;7;8;98;99,Metropolitan;North;Northeast;Southeast;Central;Southwest;Northwest;Petén;(DK);(Refused)
+RegionGuinea,Region 2 Guinea,1;2;3;4,Basse Guinee;Moyenne Guinee;Haute Guinee;Guinee Forestiere
+RegionHonduras,REGION 2 Honduras,1;2;3;4;5;6;7;98;99,South (Sur);North-East (Nor Oriente);Central - West (Centro Occidental);Central - East (Centro Oriental);North (Norte);West;Atlantic Coast (Litoral Atlantico);(DK);(Refused)
+RegionIndia,Region 2 India,1;2;3;4;5;98;99,Central;East;West;North;South;(DK);(Refused)
+RegionIndonesia,Region2 Indonesia,1;2;3;4;5;6;7;8,"Sumatra;DKI Jakarta, Banten, West Java;Central Java, DI Yogjakarta;East Java;Kalimantan;Sulawesi;Bali, NTB, NTT;Indonesia Timur"
+RegionIran,Region 2 Iran,1;2;3;4;5,Northwest (Azerbaijan Iran);Western Iran (excl Tehran);Tehran;Central Iran;Eastern Iran
+RegionIsrael,Region Israel,1;2;3;4;5;6;98;99,Jerusalem District;Northern District;Haifa District;Central District;Tel Aviv District;Southern District;(DK);(Refused)
+RegionIvoryCoast,Region 2 Ivory Coast,1;2;3;4;5;98;99,Abidjan;South;West;Northeast;Center;(DK);(Refused)
+RegionJordan,Region Jordan,1;2;3;4;5;6;7;8;9;10;11;12;98;99,Amman;Al Zarqa;Al Balqa a;Madaba;Irbid;Al Mafraq;Jarash;Ajloun;Al Karak;Al Tafilah;Ma an;Al Aqaba;(DK);(Refused)
+RegionKazakhstan,Region 2 Kazakhstan,1;2;3;4;5;6;7,Astana;East;South;West;North;Center;Almaty
+RegionKenya,Region 2 Kenya,1;2;3;4;5;6;7;8;98;99,Nairobi Province;Central Province;Eastern Province;Nyanza Province;Rift Valley Province;Western Province;North Eastern Province;Coast Province;(DK);(Refused)
+RegionKyrgyzstan,Region 2 Kyrgyzstan,1;2;3,Bishkek;South;North
+RegionLaos,Region 2 Laos,1;2;3,North;Central;South
+RegionLebanon,Region Lebanon,1;2;3;4;5;6;7;8;9,Beirut Governorate;Nabatieh Governorate (Jabal Amel);Beqaa Governorate;North Governorate (al-Shamal);Mount Lebanon Governorate (Jabal Lubnan);South Governorate (al-Janoub);Akkar;Baalbak & Hermel;Keserwan & Jbeil
+RegionLiberia,Region Liberia,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15,Bomi;Bong;Gbarpolu;Grand Bassa;Grand Cape Mount;Grand Gedeh;Grand Kru;Lofa;Margibi;Maryland;Montserrado;Nimba;Rivercess;River Gee;Sinoe
+RegionMadagascar,Region 2 Madagascar,1;2;3;4;5;6,Antananarivo;Antsiranana;Fianarantsoa;Mahajanga;Toamasina;Toliary
+RegionMalawi,Region 2 Malawi,1;2;3,Central Region;Northern Region;Southern Region
+RegionMalaysia,Region Malaysia,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;98;99,Johor;Kedah;Kelantan;Pahang;Perak;Selangor;Terengganu;Negeri Sembilan;Perlis;Melaka;Pulau Pinang;Putrajaya;Kuala Lumpur;Sabah;Sarawak;Labuan;(DK);(Refused)
+RegionMali,Region 2 Mali,1;2;3;4;5;6;7;8;9,Bamako;Gao/Menaka;Kayes;Kidal;Koulikoro;Mopti;Segou;Sikasso;Tombouctou/Taoudenit
+RegionMauritania,Region 2 Mauritania,1;2;3;4,Nouakchott;Central Region;North Region;South Region
+RegionMexico,Region 2 Mexico,1;2;3;98;99,Norte (North);Sur (South);Centro (Central);(DK);(Refused)
+RegionMoldova,Region2 Moldova,1;2;3;98;99,North;Center;South;(DK);(Refused)
+RegionMongolia,Region 2 Mongolia,1;2;3;4;5,West;Khangai;Central;East;Ulaanbaatar
+RegionMorocco,Region 3 Morocco,1;2;3;4;5;6;7;8;9;10;11;12;98;99,Tanger-Tetouan-Al Hoceima Region;Oriental Region;Fes-Meknes Region;Rabat-Sale-Kenitra Region;Beni Mellal-Khenifra Region;Casablanca-Settat Region;Marrakech-Safi Region;Draa-Tafilalet Region;Souss-Massa Region;Guelmim-Oued Noun Region;Laayoune-Sakia El Hamra Region;Dakhla-Oued Ed-Dahab Region;(DK);(Refused)
+RegionMozambique,Region 2 Mozambique,1;2;3,North;Central;South
+RegionMyanmar,Region Myanmar,1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;98;99,Chin State;Kachin State;Kayah State;Kayin State;Mon State;Rakhine State;Shan State;Ayeyarwady Region;Bago Region;Magway Region;Mandalay Region;Sagaing Region;Tanintharyi Region;Yangon Region;Naypyidaw Union Territory;(DK);(Refused)
+RegionNamibia,Region 2 Namibia,1;2;3;4;98;99,Southeast;Central;Northern Urban;Northeast;(DK);(Refused)
+RegionNepal,Region2 Nepal,1;2;3;4;5,Eastern Region;Central Region;Western Region;Mid-Western Region;Far-Western Region
+RegionNicaragua,Region 2 Nicaragua,1;2;3;4;5;6;7;8;9;98;99,La Segovia;Western (Occidental);Managua;South (Sur);Central;North (Norte);R.A.A.N.;R.A.A.S.;Rio San Juan;(DK);(Refused)
+RegionNiger,Region 2 Niger,1;2;3;4;5;6;7;8,Agadez;Diffa;Dosso;Maradi;Niamey (District);Tahoua;Tillaberi;Zinder
+RegionNigeria,Region 2 Nigeria,1;2;3;4;5;6;98;99,North Central;North East;North West;South East;South South;South West;(DK);(Refused)
+RegionPakistan,Region 2 Pakistan,1;2;3,Southwest;East;North
+RegionPalestine,Region 2 Palestine,1;2;3,West Bank;Gaza Strip;Jerusalem
+RegionParaguay,Region 2 Paraguay,1;2;3;5;98;99,Norte (North);Sur (South);Este (East);Centro (Central);(DK);(Refused)
+RegionPeru,Region 2 Peru,1;2;3;4;5;6;7;8;98;99,Lima Metropolitana (Lima Metropolis);Sierra Norte (North Sierra/North Mountain);Sierra Centro (Central Sierra/Central Mountain);Sierra Sur (South Sierra/South Mountain);Costa Norte (North Coast);Costa Sur (South Coast);Selva (Forest);Costa Centro (Central Coast);(DK);(Refused)
+RegionPhilippines,Region 2 Philippines,1;3;4;5;98;99,NCR;Balance Luzon;Visayas;Mindanao;(DK);(Refused)
+RegionRussia,Region 3 Russia,1;2;3;4;5;6;7;8;9;10;98;99,Moscow city (capital);Saint-Petersburg city;Center (excl Moscow city);Northwest (excl Saint-Petersburg city);South;Privolzhskiy;Urals;Siberia;Far East;North Caucasus;(DK);(Refused)
+RegionSenegal,Region 2 Senegal,1;2;3;4;5,Central;Natural Casamance;North;Oriental;West
+RegionSierraLeone,Region2 Sierra Leone,1;2;3;4,Eastern Province;Northern Province;Southern Province;Western Province
+RegionSomalia,Region 2 Somalia,1;2;3,Somaliland;Puntland;South Central
+RegionSouthAfrica,Region South Africa,1;2;3;4;5;6;7;8;9;98;99,Eastern Cape;Free State;Gauteng;KwaZulu Natal;Limpopo;Mpumalanga;North West;Northern Cape;Western Cape;(DK);(Refused)
+RegionSriLanka,Region Sri Lanka,1;2;3;4;5;6;7;8;9;98;99,Western;Central;Southern;Northern;Eastern;Northwest;North Central;Uva;Sabaragamuwa;(DK);(Refused)
+RegionSwitzerland,Region 2 Switzerland,1;2;3;4;5;6;7,Lake Geneva region (CH01);Espace Mittelland (CH02);Northwestern Switzerland (CH03);Zurich (CH04);Eastern Switzerland (CH05);Central Switzerland (CH06);Ticino (CH07)
+RegionTajikistan,Region 2 Tajikistan,1;2;3;4;98;99,Dushanbe;East;South;North;(DK);(Refused)
+RegionTanzania,Region 2 Tanzania,1;2;3;4;5;6;7;8;98;99,Central;Coastal;Islands;Lake;Mountain;Northern;Southern;Western;(DK);(Refused)
+RegionThailand,Region 2 Thailand,1;2;3;4;5;98;99,North;Northeast;Central;South;Bangkok;(DK);(Refused)
+RegionTogo,Region 2 Togo,1;2;3;4;5;6;98;99,Centrale;Kara;Maritime;Plateaux;Savanes;Lome;(DK);(Refused)
+RegionTunisia,Region 2 Tunisia,1;2;3,North;Center;South
+RegionTurkey,Region 2 Turkey,1;2;3;4;5;6;7;98;99,Aegean Region (Ege Bolgesi);Black Sea Region (Karadeniz Bolgesi);Central Anatolia Region (Ic Anadolu Bolgesi);Eastern Anatolia Region (Dogu Anadolu Bolgesi);Marmara Region (Marmara Bolgesi);Mediterranean Region (Akdeniz Bolgesi);Southeastern Anatolia Region (Guneydogu Anadolu Bolgesi);(DK);(Refused)
+RegionUganda,Region 2 Uganda,1;2;3;4;98;99,Central Region;Eastern Region;Northern Region;Western Region;(DK);(Refused)
+RegionUkraine,Region 2 Ukraine,1;2;3;4;5;6;98;99,Kiev;East;South;West;North;Center;(DK);(Refused)
+RegionUSA,Region 2 USA,1;2;3;4,Northeast;Midwest;South;West
+RegionUzbekistan,Region 2 Uzbekistan,1;2;3;5;6,Tashkent;East;South;North/West;Center
+RegionVenezuela,Region 2 Venezuela,1;2;3;4;5;6;98;99,Zone I: Capital;Zone II: North-Western;Zone III: Eastern;Zone IV: Centre Llano;Zone V: Central West;Zone VI: Andean;(DK);(Refused)
+RegionVietnam,Region 2 Vietnam,1;2;3;98;99,North;Central;South;(DK);(Refused)
+RegionYemen,Region 2 Yemen,1;2;3;4;5,Midlands region;Southern region;Northern region;Eastern region;Western region
+RegionZambia,Region 2 Zambia,1;2;3;4;5;6;7;8;9;10;98;99,Central;Copper Belt;Eastern;Lua pula;Lusaka;Northern;North Western;Southern;Western;Muchinga;(DK);(Refused)
+RegionZimbabwe,Region Zimbabwe,1;2;3;4;5;6;7;8;9;10;98;99,Bulawayo;Harare;Manicaland;Mashonaland Central;Mashonaland East;Mashonaland West;Masvingo;Matabeleland North;Matabeleland South;Midlands;(DK);(Refused)
